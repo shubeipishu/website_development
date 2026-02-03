@@ -1,0 +1,22 @@
+[
+    {
+        "date": "2026-01-28",
+        "title": "网站架构升级",
+        "description": "迁移至 Docker + Nginx + FastAPI 全栈架构"
+    },
+    {
+        "date": "2026-01-20",
+        "title": "图论平台 v6.1 发布",
+        "description": "新增 TikZ 导出功能，优化主题切换体验"
+    },
+    {
+        "date": "2026-01-15",
+        "title": "添加文档中心",
+        "description": "支持 Markdown/PDF 在线阅读与下载"
+    },
+    {
+        "date": "2025-12-01",
+        "title": "图论平台 v6.0",
+        "description": "重构 UI，新增力导向布局引擎"
+    }
+]

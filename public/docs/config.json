@@ -1,0 +1,40 @@
+{
+    "sections": [
+        {
+            "title": "快速开始",
+            "items": [
+                {
+                    "title": "平台概述",
+                    "file": "getting-started/overview.md"
+                },
+                {
+                    "title": "安装与运行",
+                    "file": "getting-started/installation.md"
+                }
+            ]
+        },
+        {
+            "title": "功能指南",
+            "items": [
+                {
+                    "title": "图形编辑",
+                    "file": "features/graph-editing.md"
+                },
+                {
+                    "title": "算法可视化",
+                    "file": "features/algorithms.md"
+                }
+            ]
+        }
+    ],
+    "downloads": [
+        {
+            "name": "完整文档 (Markdown)",
+            "file": "graph-platform-guide.md"
+        },
+        {
+            "name": "快速参考卡",
+            "file": "quick-reference.md"
+        }
+    ]
+}

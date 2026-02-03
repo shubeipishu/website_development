@@ -1,0 +1,61 @@
+# ============================================================
+# Docker Compose 配置文件
+# 编排 Nginx + FastAPI 全栈应用
+# 使用方式: docker-compose up -d --build
+# ============================================================
+
+services:
+  # ========================================================
+  # Backend: FastAPI 应用
+  # ========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: website-backend
+    # 开发模式: 挂载源代码实现热重载
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/data:/app/data
+    # 从 .env 文件读取环境变量
+    env_file:
+      - .env
+    environment:
+      - ENV_TYPE=${ENV_TYPE:-dev}
+    # 健康检查
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # 内部网络 (不对外暴露端口)
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # ========================================================
+  # Web: Nginx 反向代理与静态文件服务
+  # ========================================================
+  web:
+    image: nginx:alpine
+    container_name: website-nginx
+    ports:
+      - "${WEB_BIND_IP:-0.0.0.0}:${WEB_PORT:-80}:80"
+    volumes:
+      # Nginx 配置文件
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # 静态文件目录 (热更新)
+      - ./public:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+# ============================================================
+# 自定义网络
+# ============================================================
+networks:
+  app-network:
+    driver: bridge

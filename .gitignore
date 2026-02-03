@@ -42,3 +42,8 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# User defined ignores
+新建文件夹/
+.claude/
+.DS_Store

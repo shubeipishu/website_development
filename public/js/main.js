@@ -1,0 +1,237 @@
+/**
+ * 个人主页 - 主交互脚本
+ * 功能：主题切换、FAQ 折叠、反馈表单、动态加载
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initFAQ();
+    initFeedbackForm();
+    loadChangelog();
+    loadFAQData();
+    trackVisit();
+});
+
+/* ============================================================
+   主题切换
+   ============================================================ */
+function initTheme() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const TRANSITION_MS = 300;
+    const defaultTheme = 'light';
+    const applyDefaultTheme = () => {
+        document.documentElement.setAttribute('data-theme', defaultTheme);
+        updateThemeIcon(defaultTheme);
+    };
+
+    applyDefaultTheme();
+    window.addEventListener('pageshow', (e) => {
+        if (e.persisted) applyDefaultTheme();
+    });
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.classList.add('theme-transition');
+            document.documentElement.setAttribute('data-theme', newTheme);
+            updateThemeIcon(newTheme);
+
+            setTimeout(() => {
+                document.documentElement.classList.remove('theme-transition');
+            }, TRANSITION_MS);
+        });
+    }
+}
+
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+}
+
+/* ============================================================
+   FAQ 折叠面板
+   ============================================================ */
+function initFAQ() {
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const item = button.closest('.faq-item');
+            const isActive = item.classList.contains('active');
+
+            // 关闭其他打开的项
+            document.querySelectorAll('.faq-item.active').forEach(activeItem => {
+                activeItem.classList.remove('active');
+            });
+
+            // 切换当前项
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+}
+
+/* ============================================================
+   加载 FAQ 数据
+   ============================================================ */
+async function loadFAQData() {
+    const faqList = document.getElementById('faq-list');
+    if (!faqList) return;
+
+    try {
+        const response = await fetch('/data/faq.json');
+        if (!response.ok) return;
+
+        const faqData = await response.json();
+        renderFAQ(faqData);
+    } catch (error) {
+        console.log('FAQ data not available, using static content');
+    }
+}
+
+function renderFAQ(faqData) {
+    const faqList = document.getElementById('faq-list');
+    if (!faqList || !faqData.length) return;
+
+    faqList.innerHTML = faqData.map(item => `
+        <div class="faq-item">
+            <button class="faq-question">
+                <span>${item.question}</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">${item.answer}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // 重新绑定事件
+    initFAQ();
+}
+
+/* ============================================================
+   加载更新日志
+   ============================================================ */
+async function loadChangelog() {
+    const changelogList = document.getElementById('changelog-list');
+    if (!changelogList) return;
+
+    try {
+        const response = await fetch('/data/changelog.json');
+        if (!response.ok) return;
+
+        const changelog = await response.json();
+        renderChangelog(changelog);
+    } catch (error) {
+        console.log('Changelog data not available, using static content');
+    }
+}
+
+function renderChangelog(changelog) {
+    const changelogList = document.getElementById('changelog-list');
+    if (!changelogList || !changelog.length) return;
+
+    changelogList.innerHTML = changelog.slice(0, 5).map(item => `
+        <div class="changelog-item">
+            <span class="changelog-date">${item.date}</span>
+            <div class="changelog-content">
+                <div class="changelog-title">${item.title}</div>
+                <div class="changelog-desc">${item.description || ''}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/* ============================================================
+   反馈表单
+   ============================================================ */
+function initFeedbackForm() {
+    const form = document.getElementById('feedback-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const messageEl = document.getElementById('form-message');
+        const originalText = submitBtn.textContent;
+
+        // 禁用按钮，显示加载状态
+        submitBtn.disabled = true;
+        submitBtn.textContent = '提交中...';
+
+        try {
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get('email'),
+                message: formData.get('message'),
+                timestamp: new Date().toISOString()
+            };
+
+            const response = await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                showFormMessage(messageEl, '感谢您的反馈！我们会尽快回复。', 'success');
+                form.reset();
+            } else {
+                throw new Error('提交失败');
+            }
+        } catch (error) {
+            showFormMessage(messageEl, '提交失败，请稍后重试。', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+}
+
+function showFormMessage(element, message, type) {
+    if (!element) return;
+
+    element.textContent = message;
+    element.className = `form-message ${type}`;
+
+    // 5秒后隐藏
+    setTimeout(() => {
+        element.className = 'form-message';
+    }, 5000);
+}
+
+/* ============================================================
+   访问统计
+   ============================================================ */
+async function trackVisit() {
+    try {
+        await fetch('/api/stats/visit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                page: window.location.pathname,
+                referrer: document.referrer || null,
+                timestamp: new Date().toISOString()
+            })
+        });
+    } catch (error) {
+        // 静默失败，不影响用户体验
+    }
+}
+
+/* ============================================================
+   平滑滚动到锚点
+   ============================================================ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
