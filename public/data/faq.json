@@ -1,0 +1,22 @@
+[
+    {
+        "question": "图论平台支持哪些浏览器？",
+        "answer": "推荐使用最新版 Chrome、Firefox 或 Edge 浏览器。由于使用了 ES6 模块和 Web Worker，不支持 IE 浏览器。"
+    },
+    {
+        "question": "如何在本地运行图论平台？",
+        "answer": "由于项目使用了 ES Modules，需要通过 HTTP 服务器访问。最简单的方式是使用 Python: <code>python -m http.server 8080</code>，然后访问 <code>http://localhost:8080/graph-platform/</code>"
+    },
+    {
+        "question": "支持哪些图算法？",
+        "answer": "目前支持 15+ 种算法，包括：BFS/DFS 遍历、最短路径（Dijkstra）、最大流（Ford-Fulkerson）、图着色、连通性检测等。详见文档中心。"
+    },
+    {
+        "question": "如何导出图为 LaTeX/TikZ 格式？",
+        "answer": "在工具栏中点击「导出」按钮，选择「TikZ 代码」选项，即可生成可编译的 LaTeX 代码。"
+    },
+    {
+        "question": "遇到问题如何反馈？",
+        "answer": "您可以通过页面底部的反馈表单提交问题或建议，我们会尽快回复。"
+    }
+]

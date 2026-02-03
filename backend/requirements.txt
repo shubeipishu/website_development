@@ -1,0 +1,8 @@
+# FastAPI 后端依赖清单
+# 使用 pip install -r requirements.txt 安装
+
+# Web 框架
+fastapi>=0.109.0
+
+# ASGI 服务器 (包含标准依赖如 uvloop, httptools)
+uvicorn[standard]>=0.27.0
