@@ -11,12 +11,12 @@
     --primary-color: #6366f1;
     --primary-hover: #4f46e5;
     --primary-light: rgba(99, 102, 241, 0.1);
-    
+
     /* 语义色 */
     --success-color: #10b981;
     --warning-color: #f59e0b;
     --error-color: #ef4444;
-    
+
     /* 浅色主题 */
     --bg-color: #f8fafc;
     --bg-secondary: #f1f5f9;
@@ -24,7 +24,7 @@
     --text-color: #1e293b;
     --text-secondary: #64748b;
     --border-color: #e2e8f0;
-    
+
     /* 布局 */
     --max-width: 1200px;
     --nav-height: 64px;
@@ -32,7 +32,7 @@
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    
+
     /* 过渡 */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
@@ -52,7 +52,9 @@
 /* ============================================================
    基础重置与通用样式
    ============================================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -68,7 +70,7 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--bg-color);
-    transition: background-color var(--transition-normal), color var(--transition-normal);
+    transition: color var(--transition-normal);
 }
 
 /* 主题切换统一过渡：避免元素快慢不一致 */
@@ -223,13 +225,21 @@ main {
     padding-top: var(--nav-height);
 }
 
+/* 确保内容在粒子画布之上 */
+.navbar,
+main,
+.footer {
+    position: relative;
+    z-index: 1;
+}
+
 /* ============================================================
    Hero 区域
    ============================================================ */
 .hero {
     padding: 5rem 0;
     text-align: center;
-    background: linear-gradient(135deg, var(--bg-color) 0%, var(--bg-secondary) 100%);
+    background: transparent;
 }
 
 .hero-content {
@@ -491,7 +501,7 @@ main {
    反馈表单
    ============================================================ */
 .feedback-section {
-    background: var(--bg-secondary);
+    background: transparent;
 }
 
 .feedback-form {
@@ -602,28 +612,28 @@ main {
     .nav-links {
         display: none;
     }
-    
+
     .hero h1 {
         font-size: 2rem;
     }
-    
+
     .hero-subtitle {
         font-size: 1.1rem;
     }
-    
+
     .section {
         padding: 3rem 0;
     }
-    
+
     .projects-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .changelog-item {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .changelog-date {
         align-self: flex-start;
     }
@@ -632,9 +642,233 @@ main {
 /* ============================================================
    工具类
    ============================================================ */
-.text-center { text-align: center; }
-.text-muted { color: var(--text-secondary); }
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: 1rem; }
-.mb-1 { margin-bottom: 0.5rem; }
-.mb-2 { margin-bottom: 1rem; }
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--text-secondary);
+}
+
+.mt-1 {
+    margin-top: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+/* ============================================================
+   粒子背景画布
+   ============================================================ */
+#particle-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ============================================================
+   打字机光标效果
+   ============================================================ */
+.typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: var(--primary-color);
+    margin-left: 4px;
+    animation: blink 1s infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   滚动渐入动画
+   ============================================================ */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 不同元素的延迟效果 */
+.projects-grid .scroll-animate:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.projects-grid .scroll-animate:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.projects-grid .scroll-animate:nth-child(3) {
+    transition-delay: 0.2s;
+}
+
+.projects-grid .scroll-animate:nth-child(4) {
+    transition-delay: 0.3s;
+}
+
+.faq-list .scroll-animate:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.faq-list .scroll-animate:nth-child(2) {
+    transition-delay: 0.05s;
+}
+
+.faq-list .scroll-animate:nth-child(3) {
+    transition-delay: 0.1s;
+}
+
+.faq-list .scroll-animate:nth-child(4) {
+    transition-delay: 0.15s;
+}
+
+.faq-list .scroll-animate:nth-child(5) {
+    transition-delay: 0.2s;
+}
+
+.faq-list .scroll-animate:nth-child(6) {
+    transition-delay: 0.25s;
+}
+
+/* ============================================================
+   按钮涟漪效果
+   ============================================================ */
+.btn,
+.form-submit,
+.nav-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   卡片3D悬浮效果
+   ============================================================ */
+.project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.project-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .project-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   Hero 区域动画增强
+   ============================================================ */
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero h1 {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-subtitle {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-buttons {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   导航栏Logo动画
+   ============================================================ */
+.nav-logo-img {
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover .nav-logo-img {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+/* ============================================================
+   统一交互动画语言
+   所有可交互元素共享一致的悬浮体验：微升 + 阴影增强
+   ============================================================ */
+
+/* 交互元素基础过渡（覆盖默认值） */
+.btn,
+.project-card,
+.faq-item,
+.changelog-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+/* 统一悬浮效果：微升 */
+.btn:hover,
+.changelog-item:hover {
+    transform: translateY(-2px);
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .project-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}

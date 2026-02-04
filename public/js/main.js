@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadChangelog();
     loadFAQData();
     trackVisit();
+    loadVisitCount();
 });
 
 /* ============================================================
@@ -18,15 +19,31 @@ document.addEventListener('DOMContentLoaded', () => {
 function initTheme() {
     const themeToggle = document.getElementById('theme-toggle');
     const TRANSITION_MS = 300;
-    const defaultTheme = 'light';
-    const applyDefaultTheme = () => {
-        document.documentElement.setAttribute('data-theme', defaultTheme);
-        updateThemeIcon(defaultTheme);
+    const STORAGE_KEY = 'site-theme';
+
+    // 从 localStorage 读取，如果没有则默认 light
+    const savedTheme = localStorage.getItem(STORAGE_KEY) || 'light';
+
+    const applyTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        updateThemeIcon(theme);
     };
 
-    applyDefaultTheme();
+    applyTheme(savedTheme);
+
+    // 处理页面缓存恢复
     window.addEventListener('pageshow', (e) => {
-        if (e.persisted) applyDefaultTheme();
+        if (e.persisted) {
+            const theme = localStorage.getItem(STORAGE_KEY) || 'light';
+            applyTheme(theme);
+        }
+    });
+    // 跨标签页同步主题
+    window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY) {
+            const theme = e.newValue || 'light';
+            applyTheme(theme);
+        }
     });
 
     if (themeToggle) {
@@ -37,6 +54,9 @@ function initTheme() {
             document.documentElement.classList.add('theme-transition');
             document.documentElement.setAttribute('data-theme', newTheme);
             updateThemeIcon(newTheme);
+
+            // 保存到 localStorage
+            localStorage.setItem(STORAGE_KEY, newTheme);
 
             setTimeout(() => {
                 document.documentElement.classList.remove('theme-transition');
@@ -220,6 +240,25 @@ async function trackVisit() {
         });
     } catch (error) {
         // 静默失败，不影响用户体验
+    }
+}
+
+/* ============================================================
+   访问量显示
+   ============================================================ */
+async function loadVisitCount() {
+    const el = document.getElementById('visit-count');
+    if (!el) return;
+
+    try {
+        const response = await fetch('/api/stats/count');
+        if (!response.ok) return;
+        const data = await response.json();
+        if (typeof data.count === 'number') {
+            el.textContent = data.count.toLocaleString('zh-CN');
+        }
+    } catch (error) {
+        // 静默失败
     }
 }
 
