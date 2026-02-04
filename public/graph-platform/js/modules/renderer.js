@@ -122,6 +122,11 @@ export class Renderer {
     }
 
     loop() {
+        if (this.app.paused) {
+            requestAnimationFrame(() => this.loop());
+            return;
+        }
+
         if (this.app.physics) this.app.physics.applyPhysics(); // Delegate to Physics module
         
         const ctx = this.app.ctx;

@@ -76,6 +76,10 @@ class GraphApp {
         window.addEventListener('pageshow', (e) => {
             if (e.persisted) this.ui.loadTheme();
         });
+        document.addEventListener('visibilitychange', () => {
+            this.paused = document.hidden;
+        });
+        this.paused = document.hidden;
         this.renderer.resize();
         this.ui.renderLatexUI();
         this.generator.renderGenSidebar();
