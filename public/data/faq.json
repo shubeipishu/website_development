@@ -5,7 +5,7 @@
     },
     {
         "question": "如何在本地运行图论平台？",
-        "answer": "由于项目使用了 ES Modules，需要通过 HTTP 服务器访问。最简单的方式是使用 Python: <code>python -m http.server 8080</code>，然后访问 <code>http://localhost:8080/graph-platform/</code>"
+        "answer": "推荐使用项目提供的 <code>start_server.bat</code> 一键启动脚本，或通过 Python 启动服务器：<code>python -m http.server 8080</code>，然后访问 <code>http://127.0.0.1:8080</code>。详见<a href='/docs.html?doc=getting-started/installation.md'>安装文档</a>。"
     },
     {
         "question": "支持哪些图算法？",
@@ -21,6 +21,6 @@
     },
     {
         "question": "可以下载图论平台的源代码吗？",
-        "answer": "目前图论平台仅提供在线使用版本，暂不提供源代码下载。如有合作需求，欢迎通过反馈表单联系。"
+        "answer": "项目已在 GitHub 开源，欢迎访问 <a href='https://github.com/shubeipishu/website_development' target='_blank'>GitHub 仓库</a> 查看源代码。"
     }
 ]
