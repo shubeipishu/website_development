@@ -1,21 +1,16 @@
 {
     "sections": [
         {
-            "title": "快速开始",
+            "title": "图论科研平台 Pro",
             "items": [
                 {
-                    "title": "平台概述",
+                    "title": "概述",
                     "file": "getting-started/overview.md"
                 },
                 {
                     "title": "安装与运行",
                     "file": "getting-started/installation.md"
-                }
-            ]
-        },
-        {
-            "title": "功能指南",
-            "items": [
+                },
                 {
                     "title": "图形编辑",
                     "file": "features/graph-editing.md"
@@ -23,6 +18,15 @@
                 {
                     "title": "算法可视化",
                     "file": "features/algorithms.md"
+                }
+            ]
+        },
+        {
+            "title": "其他项目",
+            "items": [
+                {
+                    "title": "开发中...",
+                    "file": "placeholder.md"
                 }
             ]
         }

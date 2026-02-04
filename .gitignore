@@ -47,3 +47,6 @@ build/
 新建文件夹/
 .claude/
 .DS_Store
+
+# 后端数据目录 (包含数据库和用户数据)
+backend/data/
