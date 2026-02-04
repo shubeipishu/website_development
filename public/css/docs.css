@@ -70,7 +70,7 @@
     padding: 0.5rem 1.5rem;
     font-size: 0.75rem;
     font-weight: 700;
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.05em;
     color: var(--text-secondary);
 }
@@ -316,6 +316,51 @@
     border: none;
     border-top: 1px solid var(--border-color);
     margin: 2rem 0;
+}
+
+/* ============================================================
+   Admonition 提示块
+   ============================================================ */
+.markdown-body blockquote.admonition {
+    border: 1px solid var(--border-color);
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin: 1.25rem 0;
+    background: var(--bg-secondary);
+}
+
+.markdown-body blockquote.admonition .admonition-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-body blockquote.admonition .admonition-content > :first-child {
+    margin-top: 0;
+}
+
+.markdown-body blockquote.admonition .admonition-content > :last-child {
+    margin-bottom: 0;
+}
+
+.markdown-body blockquote.admonition.admonition-note {
+    border-left-color: var(--primary-color);
+}
+
+.markdown-body blockquote.admonition.admonition-tip {
+    border-left-color: var(--success-color);
+}
+
+.markdown-body blockquote.admonition.admonition-warning {
+    border-left-color: var(--warning-color);
+}
+
+.markdown-body blockquote.admonition.admonition-important {
+    border-left-color: var(--error-color);
+}
+
+.markdown-body blockquote.admonition.admonition-caution {
+    border-left-color: var(--warning-color);
 }
 
 /* ============================================================

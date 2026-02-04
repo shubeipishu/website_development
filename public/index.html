@@ -7,6 +7,15 @@
     <meta name="description" content="个人主页 - 技术爱好者，专注于 Web 开发和数学可视化">
     <title>树皮斑马 - 个人主页</title>
 
+    <!-- 主题预设，避免闪烁 -->
+    <script>
+        (function () {
+            const key = 'site-theme';
+            const theme = localStorage.getItem(key) || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
     <!-- 字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +54,9 @@
         </div>
     </nav>
 
+    <!-- 粒子背景画布 -->
+    <canvas id="particle-canvas"></canvas>
+
     <main>
         <!-- ============================================================
              Hero 区域
@@ -54,7 +66,7 @@
                 <div class="hero-content">
                     <!-- 可选：添加头像 -->
                     <!-- <img src="assets/avatar.jpg" alt="头像" class="hero-avatar"> -->
-                    <h1>你好，我是 树皮斑马 👋</h1>
+                    <h1>你好，我是 <span id="typewriter-text">树皮斑马</span><span class="typewriter-cursor"></span> 👋</h1>
                     <p class="hero-subtitle">
                         欢迎来到我的个人主页。我是一名技术爱好者，热衷于探索 Web 开发和数学可视化。
                         这里展示了我的项目和技术文档。
@@ -234,6 +246,7 @@
 
     <!-- 脚本 -->
     <script src="js/main.js"></script>
+    <script src="js/effects.js"></script>
 </body>
 
 </html>

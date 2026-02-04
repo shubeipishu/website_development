@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 
@@ -62,6 +62,12 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             ip_address TEXT
         )
+    """)
+
+    # 索引：提升按天+页面+IP 的去重查询性能
+    cursor.execute("""
+        CREATE INDEX IF NOT EXISTS idx_visits_page_ip_date
+        ON visits (page, ip_address, created_at)
     """)
     
     conn.commit()
@@ -222,25 +228,40 @@ async def get_feedbacks(limit: int = 50, x_api_key: str = Header(None)):
 # ============================================================
 
 @app.post("/api/stats/visit")
-async def record_visit(visit: VisitRecord):
+async def record_visit(visit: VisitRecord, request: Request, x_forwarded_for: str = Header(None)):
     """
     记录页面访问
     
     存储访问记录到数据库。
     """
     try:
+        # 取客户端 IP（优先使用代理转发头）
+        ip_address = None
+        if x_forwarded_for:
+            ip_address = x_forwarded_for.split(",")[0].strip()
+        if not ip_address and request.client:
+            ip_address = request.client.host
+
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        
+
+        # 防刷：同一 IP + 页面在同一天只计一次
+        today = datetime.now().strftime("%Y-%m-%d")
         cursor.execute(
-            "INSERT INTO visits (page, referrer, created_at) VALUES (?, ?, ?)",
-            (visit.page, visit.referrer, datetime.now().isoformat())
+            "SELECT 1 FROM visits WHERE page = ? AND ip_address = ? AND created_at LIKE ? LIMIT 1",
+            (visit.page, ip_address, f"{today}%")
         )
-        
-        conn.commit()
+        exists = cursor.fetchone() is not None
+
+        if not exists:
+            cursor.execute(
+                "INSERT INTO visits (page, referrer, created_at, ip_address) VALUES (?, ?, ?, ?)",
+                (visit.page, visit.referrer, datetime.now().isoformat(), ip_address)
+            )
+            conn.commit()
+
         conn.close()
-        
-        return {"success": True}
+        return {"success": True, "counted": not exists}
     except Exception as e:
         # 静默失败，不影响用户体验
         return {"success": False}
