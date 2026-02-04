@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 
@@ -29,6 +29,9 @@ DB_PATH = DATA_DIR / "website.db"
 
 # 反馈 JSON 文件路径（备用方案）
 FEEDBACK_FILE = DATA_DIR / "feedback.json"
+
+# 管理员 API Key（从环境变量读取）
+ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "")
 
 # ============================================================
 # 数据库初始化
@@ -183,12 +186,18 @@ async def submit_feedback(feedback: FeedbackCreate):
 
 
 @app.get("/api/feedback")
-async def get_feedbacks(limit: int = 50):
+async def get_feedbacks(limit: int = 50, x_api_key: str = Header(None)):
     """
     获取反馈列表（管理用）
     
-    返回最近的反馈记录。
+    需要提供有效的 API Key 才能访问。
+    在请求头中添加: X-Api-Key: <your-key>
     """
+    # 验证 API Key
+    if not ADMIN_API_KEY:
+        raise HTTPException(status_code=503, detail="管理功能未配置")
+    if x_api_key != ADMIN_API_KEY:
+        raise HTTPException(status_code=403, detail="未授权访问")
     try:
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()

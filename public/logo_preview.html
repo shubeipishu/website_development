@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>树皮斑马 Logo 设计方案</title>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            margin: 0;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark {
+            background-color: #111827;
+            color: #f9fafb;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        h1 { margin-bottom: 0.5rem; }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid currentColor;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: inherit;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.2s, background 0.3s;
+        }
+        body.dark .card {
+            background: #1f2937;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .logo-container {
+            width: 128px;
+            height: 128px;
+            /* outline: 1px dashed rgba(156, 163, 175, 0.5); */
+        }
+        h2 { font-size: 1.25rem; margin: 0; }
+        p { 
+            font-size: 0.875rem; 
+            color: #6b7280; 
+            text-align: center; 
+            margin: 0;
+            line-height: 1.5;
+        }
+        body.dark p { color: #9ca3af; }
+        
+        /* SVG Animation/Styles */
+        .zebra-stripe { fill: currentColor; }
+        .accent { fill: #3b82f6; } /* Blue-500 */
+        .accent-secondary { fill: #10b981; } /* Emerald-500 */
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Logo 设计方案预览</h1>
+        <p>为 "树皮斑马" (ShubeiPishu) 也就是图论科研平台设计的图标方案</p>
+        <div class="controls">
+            <button onclick="document.body.classList.toggle('dark')">切换深色/浅色背景</button>
+        </div>
+    </div>
+
+    <div class="grid">
+        <!-- 方案 1: 抽象斑马 (Graph Zebra) -->
+        <div class="card">
+            <div class="logo-container" style="color: #3b82f6;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Zebra Stripes represented as connections -->
+                    <circle cx="20" cy="20" r="8" fill="currentColor" fill-opacity="0.2"/>
+                    <circle cx="80" cy="20" r="8" fill="currentColor" fill-opacity="0.2"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                    <circle cx="20" cy="80" r="8" fill="currentColor" fill-opacity="0.2"/>
+                    <circle cx="80" cy="80" r="8" fill="currentColor" fill-opacity="0.2"/>
+                    
+                    <!-- Z shape connections -->
+                    <path d="M28 20 H72 L28 80 H72" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>方案 A: 极简图论 Z</h2>
+            <p>使用 "Z" (Zebra) 字形作为主体，结合图论的节点(Nodes)和边(Edges)概念。经典、易识别，适合作为 Favicon。</p>
+        </div>
+
+        <!-- 方案 2: 树皮年轮 (Topo Bark) -->
+        <div class="card">
+            <div class="logo-container" style="color: #10b981;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer Ring -->
+                    <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="6"/>
+                    <!-- Nodes on ring -->
+                    <circle cx="50" cy="10" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
+                    <circle cx="90" cy="50" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
+                    <circle cx="50" cy="90" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
+                    <circle cx="10" cy="50" r="6" fill="white" stroke="currentColor" stroke-width="3"/>
+                    
+                    <!-- Inner connection -->
+                    <path d="M50 25 L50 75 M25 50 L75 50" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                </svg>
+            </div>
+            <h2>方案 B: 拓扑年轮</h2>
+            <p>结合 "树皮" (年轮) 和 "拓扑结构" (圆环与节点)。象征着成长、稳固与连接。绿色调代表生命力。</p>
+        </div>
+
+        <!-- 方案 3: 抽象首字母 SP (ShubeiPishu) -->
+        <div class="card">
+            <div class="logo-container" style="color: #8b5cf6;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="15" y="15" width="30" height="30" rx="8" fill="currentColor" fill-opacity="0.5"/>
+                    <rect x="55" y="15" width="30" height="30" rx="8" fill="currentColor"/>
+                    <rect x="15" y="55" width="30" height="30" rx="8" fill="currentColor"/>
+                    <rect x="55" y="55" width="30" height="30" rx="8" fill="currentColor" fill-opacity="0.5"/>
+                    
+                    <!-- Connecting lines -->
+                    <path d="M45 30 H55 M30 45 V55 M70 45 V55 M45 70 H55" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2>方案 C: 矩阵方块</h2>
+            <p>四个圆角方块组成矩阵，代表图论中的邻接矩阵或像素化。类似二维码的现代感。</p>
+        </div>
+
+        <!-- 方案 4: 极简六边形 (Hexa Graph) -->
+        <div class="card">
+            <div class="logo-container" style="color: #ec4899;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M50 5 L93.3 30 V80 L50 105 L6.7 80 V30 L50 5Z" fill="currentColor" fill-opacity="0.1"/>
+                     <path d="M50 20 L80 35 V75 L50 90 L20 75 V35 L50 20Z" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+                     <circle cx="50" cy="55" r="12" fill="currentColor"/>
+                     <path d="M50 55 L50 20 M50 55 L80 75 M50 55 L20 75" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2>方案 D: 核心立方</h2>
+            <p>六边形/立方体结构。经典计算机科学符号，中心节点向外辐射，代表核心算法与稳固架构。</p>
+        </div>
+    </div>
+
+</body>
+</html>
