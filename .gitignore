@@ -50,3 +50,4 @@ build/
 
 # 后端数据目录 (包含数据库和用户数据)
 backend/data/
+backend/data/website.db
