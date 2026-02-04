@@ -291,7 +291,7 @@ function initRippleEffect() {
 // ============================================================
 // 初始化所有效果
 // ============================================================
-document.addEventListener('DOMContentLoaded', () => {
+function initEffects() {
     // 1. 粒子背景
     const canvas = document.getElementById('particle-canvas');
     if (canvas) {
@@ -321,4 +321,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. 涟漪效果
     initRippleEffect();
-});
+}
+
+window.initEffects = initEffects;
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEffects);
+} else {
+    setTimeout(initEffects, 0);
+}

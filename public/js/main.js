@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFAQData();
     trackVisit();
     loadVisitCount();
+    loadEffectsLazy();
 });
 
 /* ============================================================
@@ -259,6 +260,29 @@ async function loadVisitCount() {
         }
     } catch (error) {
         // 静默失败
+    }
+}
+
+/* ============================================================
+   延迟加载视觉效果脚本
+   ============================================================ */
+function loadEffectsLazy() {
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+
+    const load = () => {
+        if (document.getElementById('effects-script')) return;
+        const script = document.createElement('script');
+        script.id = 'effects-script';
+        script.src = 'js/effects.js';
+        script.defer = true;
+        document.body.appendChild(script);
+    };
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(load, { timeout: 1500 });
+    } else {
+        setTimeout(load, 600);
     }
 }
 

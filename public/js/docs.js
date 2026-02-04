@@ -8,30 +8,26 @@ let markedLoaded = false;
 let hljs = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadDependencies();
+    try {
+        await loadDependencies();
+    } catch (error) {
+        console.warn('Failed to load external dependencies, continuing without them:', error);
+    }
     await loadDocsConfig();
     initTheme();
     initSearch();
+    scheduleEnhancers();
 });
 
 /* ============================================================
    加载外部依赖
    ============================================================ */
 async function loadDependencies() {
-    // 加载 marked.js
+    // 加载 marked.js（核心渲染）
     await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
     markedLoaded = true;
 
-    // 加载 highlight.js
-    await loadScript('https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js');
-    hljs = window.hljs;
-
-    // 加载 KaTeX (公式渲染)
-    await loadCSS('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');
-    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
-    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
-
-    // 配置 marked
+    // 配置 marked（高亮在增强模块加载后再处理）
     if (window.marked) {
         window.marked.setOptions({
             highlight: function (code, lang) {
@@ -44,6 +40,34 @@ async function loadDependencies() {
             gfm: true
         });
     }
+}
+
+function scheduleEnhancers() {
+    const run = () => {
+        loadEnhancers().catch(err => {
+            console.warn('Enhancers failed to load:', err);
+        });
+    };
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(run, { timeout: 2000 });
+    } else {
+        setTimeout(run, 800);
+    }
+}
+
+async function loadEnhancers() {
+    if (!hljs) {
+        await loadScript('https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js');
+        hljs = window.hljs;
+    }
+
+    if (!window.katex) {
+        await loadCSS('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');
+        await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
+        await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
+    }
+
+    enhanceCurrentContent();
 }
 
 function loadScript(src) {
@@ -140,6 +164,7 @@ function syncHighlightTheme(theme) {
    加载文档配置
    ============================================================ */
 let docsConfig = null;
+const docsCache = new Map();
 
 async function loadDocsConfig() {
     const sidebar = document.getElementById('docs-nav');
@@ -225,11 +250,16 @@ function renderSidebar(config) {
 
     sidebar.innerHTML = html;
 
-    // 绑定导航点击事件
-    sidebar.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
+    // 绑定导航点击事件（事件代理，避免链接触发整页刷新）
+    if (!sidebar.dataset.bound) {
+        sidebar.addEventListener('click', (e) => {
+            const link = e.target.closest('a.nav-link');
+            if (!link) return;
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+
             e.preventDefault();
             const file = link.dataset.file;
+            if (!file) return;
             loadDocument(file);
 
             // 更新 URL
@@ -241,7 +271,8 @@ function renderSidebar(config) {
             sidebar.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         });
-    });
+        sidebar.dataset.bound = '1';
+    }
 }
 
 /* ============================================================
@@ -252,6 +283,11 @@ async function loadDocument(filePath) {
     const titleEl = document.getElementById('docs-title');
 
     if (!content) return;
+
+    if (docsCache.has(filePath)) {
+        renderDocumentFromCache(filePath, docsCache.get(filePath));
+        return;
+    }
 
     // 显示加载状态
     content.innerHTML = `
@@ -266,55 +302,71 @@ async function loadDocument(filePath) {
         if (!response.ok) throw new Error('Document not found');
 
         const markdown = await response.text();
+        docsCache.set(filePath, markdown);
 
-        // 渲染 Markdown
-        if (window.marked) {
-            content.innerHTML = `<div class="markdown-body">${window.marked.parse(markdown)}</div>`;
-        } else {
-            content.innerHTML = `<pre>${markdown}</pre>`;
-        }
-
-        // 处理 Admonition 语法: > [!NOTE] / [!TIP] / [!WARNING] 等
-        transformAdmonitions(content);
-
-        // 渲染公式 (KaTeX)
-        if (window.renderMathInElement) {
-            renderMathInElement(content, {
-                delimiters: [
-                    { left: "$$", right: "$$", display: true },
-                    { left: "$", right: "$", display: false },
-                    { left: "\\(", right: "\\)", display: false },
-                    { left: "\\[", right: "\\]", display: true }
-                ],
-                throwOnError: false
-            });
-        }
-
-        // 代码高亮
-        if (hljs) {
-            content.querySelectorAll('pre code').forEach(block => {
-                hljs.highlightElement(block);
-            });
-        }
-
-        // 更新标题
-        const firstH1 = content.querySelector('h1');
-        if (titleEl && firstH1) {
-            titleEl.textContent = firstH1.textContent;
-            firstH1.remove(); // 避免重复显示
-        }
-
-        // 更新 active 导航
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active', link.dataset.file === filePath);
-        });
-
-        // 拦截 Markdown 内部链接，转换为文档系统导航
-        interceptMarkdownLinks(content, filePath);
+        renderDocumentFromCache(filePath, markdown);
 
     } catch (error) {
         console.error('Failed to load document:', error);
         showEmptyState('文档未找到', `无法加载 ${filePath}`);
+    }
+}
+
+function renderDocumentFromCache(filePath, markdown) {
+    const content = document.getElementById('docs-content');
+    const titleEl = document.getElementById('docs-title');
+    if (!content) return;
+
+    // 渲染 Markdown
+    if (window.marked) {
+        content.innerHTML = `<div class="markdown-body">${window.marked.parse(markdown)}</div>`;
+    } else {
+        content.innerHTML = `<pre>${markdown}</pre>`;
+    }
+
+    // 处理 Admonition 语法: > [!NOTE] / [!TIP] / [!WARNING] 等
+    transformAdmonitions(content);
+
+    enhanceCurrentContent();
+
+    // 更新标题
+    const firstH1 = content.querySelector('h1');
+    if (titleEl && firstH1) {
+        titleEl.textContent = firstH1.textContent;
+        firstH1.remove(); // 避免重复显示
+    }
+
+    // 更新 active 导航
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.toggle('active', link.dataset.file === filePath);
+    });
+
+    // 拦截 Markdown 内部链接，转换为文档系统导航
+    interceptMarkdownLinks(content, filePath);
+}
+
+function enhanceCurrentContent() {
+    const content = document.getElementById('docs-content');
+    if (!content) return;
+
+    // 渲染公式 (KaTeX)
+    if (window.renderMathInElement) {
+        renderMathInElement(content, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            throwOnError: false
+        });
+    }
+
+    // 代码高亮
+    if (hljs) {
+        content.querySelectorAll('pre code').forEach(block => {
+            hljs.highlightElement(block);
+        });
     }
 }
 
