@@ -1,61 +1,7 @@
 import '@/styles/main.css';
 import { loadChangelog } from './changelog';
 import { initFAQ, loadFAQData } from './faq';
-
-/* ============================================================
-   主题切换
-   ============================================================ */
-function initTheme() {
-  const themeToggle = document.getElementById('theme-toggle') as HTMLButtonElement | null;
-  const TRANSITION_MS = 300;
-  const STORAGE_KEY = 'site-theme';
-
-  const savedTheme = localStorage.getItem(STORAGE_KEY) || 'light';
-
-  const applyTheme = (theme: string) => {
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
-  };
-
-  applyTheme(savedTheme);
-
-  window.addEventListener('pageshow', (e) => {
-    if (e.persisted) {
-      const theme = localStorage.getItem(STORAGE_KEY) || 'light';
-      applyTheme(theme);
-    }
-  });
-  window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) {
-      const theme = e.newValue || 'light';
-      applyTheme(theme);
-    }
-  });
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-      document.documentElement.classList.add('theme-transition');
-      document.documentElement.setAttribute('data-theme', newTheme);
-      updateThemeIcon(newTheme);
-
-      localStorage.setItem(STORAGE_KEY, newTheme);
-
-      setTimeout(() => {
-        document.documentElement.classList.remove('theme-transition');
-      }, TRANSITION_MS);
-    });
-  }
-}
-
-function updateThemeIcon(theme: string) {
-  const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-}
+import { initTheme } from '@/shared/theme';
 
 /* ============================================================
    反馈表单

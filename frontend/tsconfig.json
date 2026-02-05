@@ -10,7 +10,11 @@
     "esModuleInterop": true,
     "noEmit": true,
     "lib": ["ES2020", "DOM"],
-    "types": []
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src", "*.html", "apps/**/*.html", "vite.config.ts"]
 }
