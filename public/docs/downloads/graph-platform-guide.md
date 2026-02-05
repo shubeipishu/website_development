@@ -51,7 +51,7 @@
 
 **使用 Python:**
 ```bash
-cd graph-platform
+cd public/apps/graph-platform
 python -m http.server 8080
 # 访问 http://localhost:8080
 ```
