@@ -45,7 +45,7 @@
 1. **下载项目**
    ```bash
    git clone <repository-url>
-   cd graph-platform
+   cd public/apps/graph-platform
    ```
 
 2. **打开应用**
@@ -162,7 +162,7 @@
 ## 📂 项目结构
 
 ```
-graph-platform/
+apps/graph-platform/
 ├── index.html          # 应用入口
 ├── start_server.bat    # 启动脚本
 ├── css/

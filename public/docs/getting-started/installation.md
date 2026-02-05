@@ -9,7 +9,7 @@
 
 最简单的方式是直接访问在线版本，无需任何安装：
 
-👉 [立即体验图论科研平台 Pro](/graph-platform/)
+👉 [立即体验图论科研平台 Pro](/apps/graph-platform/)
 
 ---
 
@@ -23,7 +23,7 @@
 
 ```bash
 # 进入图论平台目录
-cd graph-platform
+cd public/apps/graph-platform
 
 # 双击运行 start_server.bat
 # 或在命令行执行：
@@ -44,7 +44,7 @@ start_server.bat
 
 ```bash
 # 进入项目目录
-cd graph-platform
+cd public/apps/graph-platform
 
 # 启动 HTTP 服务器
 python -m http.server 8080
@@ -61,7 +61,7 @@ python -m http.server 8080
 npm install -g http-server
 
 # 进入项目目录
-cd graph-platform
+cd public/apps/graph-platform
 
 # 启动服务器
 http-server -p 8080
@@ -72,7 +72,7 @@ http-server -p 8080
 ### 方式四：使用 VS Code Live Server
 
 1. 安装 **Live Server** 扩展
-2. 右键点击 `graph-platform/index.html`
+2. 右键点击 `public/apps/graph-platform/index.html`
 3. 选择「Open with Live Server」
 
 ---
