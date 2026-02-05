@@ -182,6 +182,7 @@ class Typewriter {
   private currentTextIndex = 0;
   private currentCharIndex = 0;
   private isDeleting = false;
+  private active = true;
 
   constructor(element: HTMLElement, texts: string[], options: { speed?: number; deleteSpeed?: number; pauseTime?: number } = {}) {
     this.element = element;
@@ -193,7 +194,12 @@ class Typewriter {
     this.type();
   }
 
+  stop() {
+    this.active = false;
+  }
+
   private type() {
+    if (!this.active) return;
     const currentText = this.texts[this.currentTextIndex];
 
     if (this.isDeleting) {
@@ -276,22 +282,44 @@ function initRippleEffect() {
   });
 }
 
-export function initEffects() {
+let typewriterInstance: Typewriter | null = null;
+
+function getTypewriterTexts(lang: string) {
+  if (lang === 'en') {
+    return ['BarkZebra', 'Graph Enthusiast', 'Web Developer'];
+  }
+  return ['树皮斑马', '图论爱好者', 'Web 开发者'];
+}
+
+function setTypewriterLanguage(lang: string) {
+  const typewriterEl = document.getElementById('typewriter-text');
+  if (!typewriterEl) return;
+
+  if (typewriterInstance) {
+    typewriterInstance.stop();
+    typewriterInstance = null;
+  }
+
+  typewriterInstance = new Typewriter(typewriterEl, getTypewriterTexts(lang), {
+    speed: 120,
+    deleteSpeed: 60,
+    pauseTime: 2500,
+  });
+}
+
+export function initEffects(lang: string) {
   const canvas = document.getElementById('particle-canvas') as HTMLCanvasElement | null;
   if (canvas) {
     new ParticleNetwork(canvas);
   }
 
-  const typewriterEl = document.getElementById('typewriter-text');
-  if (typewriterEl) {
-    new Typewriter(typewriterEl, ['树皮斑马', 'Bark Zebra', '图论爱好者', 'Web 开发者'], {
-      speed: 120,
-      deleteSpeed: 60,
-      pauseTime: 2500,
-    });
-  }
+  setTypewriterLanguage(lang);
 
   initCardHover();
   initScrollAnimations();
   initRippleEffect();
+}
+
+export function updateTypewriterLanguage(lang: string) {
+  setTypewriterLanguage(lang);
 }

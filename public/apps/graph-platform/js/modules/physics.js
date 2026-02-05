@@ -8,13 +8,14 @@ export class Physics {
     togglePhysics() {
         this.active = !this.active;
         const b = document.getElementById('btn-physics');
+        const i18n = window.GraphI18n;
         if (this.active) {
             b.classList.add('physics-on');
-            b.setAttribute('data-tooltip', '物理布局：开');
+            b.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.physics.on') : '物理布局：开');
             b.innerHTML = '<i class="fas fa-atom fa-spin"></i>';
         } else {
             b.classList.remove('physics-on');
-            b.setAttribute('data-tooltip', '物理布局：关');
+            b.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.physics.off') : '物理布局：关');
             b.innerHTML = '<i class="fas fa-atom"></i>';
         }
     }

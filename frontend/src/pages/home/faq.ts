@@ -17,12 +17,16 @@ export function initFAQ() {
   });
 }
 
-export async function loadFAQData() {
+export async function loadFAQData(lang: 'zh' | 'en' = 'zh') {
   const faqList = document.getElementById('faq-list');
   if (!faqList) return;
 
   try {
-    const response = await fetch('/data/faq.json');
+    const primaryUrl = lang === 'en' ? '/data/faq.en.json' : '/data/faq.json';
+    let response = await fetch(primaryUrl);
+    if (!response.ok && lang === 'en') {
+      response = await fetch('/data/faq.json');
+    }
     if (!response.ok) return;
 
     const faqData = await response.json();

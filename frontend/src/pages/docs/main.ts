@@ -1,11 +1,28 @@
 import '@/styles/main.css';
 import '@/styles/docs.css';
 import { initTheme } from '@/shared/theme';
+import { getLang, initI18n, onLangChange, t, type Lang } from '@/shared/i18n';
 
 // 引入 marked.js 和 highlight.js (CDN)
 let _markedLoaded = false;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let hljs: any = null;
+
+type I18nText = string | { zh?: string; en?: string };
+type DocsConfig = {
+  sections: Array<{
+    title: I18nText;
+    items: Array<{ title: I18nText; file: string }>;
+  }>;
+  downloads?: Array<{ name: I18nText; file: string }>;
+};
+
+const DOCS_BASE: Record<Lang, string> = {
+  zh: '/docs',
+  en: '/docs-en',
+};
+
+let currentDocPath: string | null = null;
 
 const init = async () => {
   try {
@@ -13,10 +30,19 @@ const init = async () => {
   } catch (error) {
     console.warn('Failed to load external dependencies, continuing without them:', error);
   }
+  initI18n();
   await loadDocsConfig();
   initTheme({ onThemeChange: syncHighlightTheme });
   initSearch();
   scheduleEnhancers();
+  onLangChange(() => {
+    if (docsConfig) {
+      renderSidebar(docsConfig);
+    }
+    if (currentDocPath) {
+      void loadDocument(currentDocPath, { force: true });
+    }
+  });
 };
 
 if (document.readyState === 'loading') {
@@ -118,8 +144,18 @@ function syncHighlightTheme(theme: string) {
 /* ============================================================
    加载文档配置
    ============================================================ */
-let docsConfig: { sections: Array<{ title: string; items: Array<{ title: string; file: string }> }>; downloads?: Array<{ name: string; file: string }> } | null = null;
+let docsConfig: DocsConfig | null = null;
 const docsCache = new Map<string, string>();
+
+function getDocsBase(lang: Lang = getLang()) {
+  return DOCS_BASE[lang] || DOCS_BASE.zh;
+}
+
+function pickText(value: I18nText, lang: Lang = getLang()) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  return value[lang] || value.zh || '';
+}
 
 async function loadDocsConfig() {
   const sidebar = document.getElementById('docs-nav');
@@ -144,10 +180,10 @@ async function loadDocsConfig() {
   } catch (error) {
     console.error('Failed to load docs config:', error);
     if (sidebar) {
-      sidebar.innerHTML = '<p style="padding: 1rem; color: var(--text-secondary);">文档配置加载失败</p>';
+      sidebar.innerHTML = `<p style="padding: 1rem; color: var(--text-secondary);">${t('docs.error.config.sidebar')}</p>`;
     }
     if (content) {
-      showEmptyState('配置文件加载失败', '请检查 docs/config.json 是否存在');
+      showEmptyState(t('docs.error.config.title'), t('docs.error.config.desc'));
     }
   }
 }
@@ -155,17 +191,19 @@ async function loadDocsConfig() {
 /* ============================================================
    渲染侧边栏
    ============================================================ */
-function renderSidebar(config: { sections: Array<{ title: string; items: Array<{ title: string; file: string }> }>; downloads?: Array<{ name: string; file: string }> }) {
+function renderSidebar(config: DocsConfig) {
   const sidebar = document.getElementById('docs-nav');
   if (!sidebar) return;
 
   let html = '';
+  const lang = getLang();
+  const base = getDocsBase(lang);
 
   // 渲染文档分组
   config.sections.forEach((section) => {
     html += `
             <div class="nav-section">
-                <div class="nav-section-title">${section.title}</div>
+                <div class="nav-section-title">${pickText(section.title, lang)}</div>
                 <ul class="nav-list">
                     ${section.items
         .map(
@@ -175,7 +213,7 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
                                class="nav-link" 
                                data-file="${item.file}">
                                 <span class="nav-link-icon">📄</span>
-                                <span>${item.title}</span>
+                                <span>${pickText(item.title, lang)}</span>
                             </a>
                         </li>
                     `
@@ -190,17 +228,17 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
   if (config.downloads && config.downloads.length > 0) {
     html += `
             <div class="nav-section downloads-section">
-                <div class="nav-section-title">📥 下载</div>
+                <div class="nav-section-title">${t('docs.nav.downloads')}</div>
                 <ul class="nav-list">
                     ${config.downloads
         .map(
           (item) => `
                         <li class="nav-item">
-                            <a href="/docs/downloads/${item.file}" 
+                            <a href="${base}/downloads/${item.file}" 
                                class="download-link" 
                                download>
                                 <span>📎</span>
-                                <span>${item.name}</span>
+                                <span>${pickText(item.name, lang)}</span>
                             </a>
                         </li>
                     `
@@ -212,6 +250,12 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
   }
 
   sidebar.innerHTML = html;
+
+  if (currentDocPath) {
+    sidebar.querySelectorAll('.nav-link').forEach((link) => {
+      link.classList.toggle('active', (link as HTMLElement).dataset.file === currentDocPath);
+    });
+  }
 
   // 绑定导航点击事件（事件代理，避免链接触发整页刷新）
   if (!sidebar.dataset.bound) {
@@ -242,13 +286,16 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
 /* ============================================================
    加载并渲染文档
    ============================================================ */
-async function loadDocument(filePath: string) {
+async function loadDocument(filePath: string, opts: { force?: boolean } = {}) {
   const content = document.getElementById('docs-content');
 
   if (!content) return;
+  currentDocPath = filePath;
+  const lang = getLang();
+  const cacheKey = `${lang}:${filePath}`;
 
-  if (docsCache.has(filePath)) {
-    renderDocumentFromCache(filePath, docsCache.get(filePath) || '');
+  if (!opts.force && docsCache.has(cacheKey)) {
+    renderDocumentFromCache(filePath, docsCache.get(cacheKey) || '');
     return;
   }
 
@@ -256,21 +303,25 @@ async function loadDocument(filePath: string) {
   content.innerHTML = `
         <div class="docs-loading">
             <div class="loading-spinner"></div>
-            <span>加载文档中...</span>
+            <span>${t('docs.loading')}</span>
         </div>
     `;
 
   try {
-    const response = await fetch(`/docs/${filePath}`);
+    const base = getDocsBase(lang);
+    let response = await fetch(`${base}/${filePath}`);
+    if (!response.ok && lang === 'en') {
+      response = await fetch(`${getDocsBase('zh')}/${filePath}`);
+    }
     if (!response.ok) throw new Error('Document not found');
 
     const markdown = await response.text();
-    docsCache.set(filePath, markdown);
+    docsCache.set(cacheKey, markdown);
 
     renderDocumentFromCache(filePath, markdown);
   } catch (error) {
     console.error('Failed to load document:', error);
-    showEmptyState('文档未找到', `无法加载 ${filePath}`);
+    showEmptyState(t('docs.error.notfound.title'), t('docs.error.notfound.desc', { file: filePath }));
   }
 }
 
@@ -291,6 +342,7 @@ function renderDocumentFromCache(filePath: string, markdown: string) {
   transformAdmonitions(content);
 
   enhanceCurrentContent();
+  ensurePlatformLinks(content);
 
   // 更新标题
   const firstH1 = content.querySelector('h1');
@@ -398,6 +450,13 @@ function interceptMarkdownLinks(container: HTMLElement, currentFilePath: string)
         window.history.pushState({}, '', url);
       });
     }
+  });
+}
+
+function ensurePlatformLinks(container: HTMLElement) {
+  container.querySelectorAll<HTMLAnchorElement>('a[href*="/apps/graph-platform"]').forEach((link) => {
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
   });
 }
 

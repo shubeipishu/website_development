@@ -2,6 +2,7 @@ import '@/styles/main.css';
 import { loadChangelog } from './changelog';
 import { initFAQ, loadFAQData } from './faq';
 import { initTheme } from '@/shared/theme';
+import { getLang, initI18n, onLangChange, t } from '@/shared/i18n';
 
 /* ============================================================
    反馈表单
@@ -20,7 +21,7 @@ function initFeedbackForm() {
     const originalText = submitBtn.textContent ?? '';
 
     submitBtn.disabled = true;
-    submitBtn.textContent = '提交中...';
+    submitBtn.textContent = t('feedback.submitting');
 
     try {
       const formData = new FormData(form);
@@ -37,13 +38,13 @@ function initFeedbackForm() {
       });
 
       if (response.ok) {
-        showFormMessage(messageEl, '感谢您的反馈！我们会尽快回复。', 'success');
+        showFormMessage(messageEl, t('feedback.success'), 'success');
         form.reset();
       } else {
         throw new Error('提交失败');
       }
     } catch (error) {
-      showFormMessage(messageEl, '提交失败，请稍后重试。', 'error');
+      showFormMessage(messageEl, t('feedback.error'), 'error');
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;
@@ -105,6 +106,7 @@ async function loadVisitCount() {
    ============================================================ */
 let effectsLoaded = false;
 let effectsLoading = false;
+let effectsModule: typeof import('./effects') | null = null;
 function loadEffectsLazy() {
   const canvas = document.getElementById('particle-canvas');
   if (!canvas || effectsLoaded || effectsLoading) return;
@@ -114,7 +116,8 @@ function loadEffectsLazy() {
     effectsLoading = true;
     try {
       const module = await import('./effects');
-      module.initEffects();
+      effectsModule = module;
+      module.initEffects(getLang());
       effectsLoaded = true;
     } catch (error) {
       console.warn('Failed to load effects module:', error);
@@ -152,15 +155,24 @@ function initAnchorScroll() {
 }
 
 const init = () => {
+  initI18n();
   initTheme();
   initFAQ();
   initFeedbackForm();
-  loadChangelog();
-  loadFAQData();
+  loadChangelog(getLang());
+  loadFAQData(getLang());
   trackVisit();
   loadVisitCount();
   loadEffectsLazy();
   initAnchorScroll();
+
+  onLangChange((lang) => {
+    loadChangelog(lang);
+    loadFAQData(lang);
+    if (effectsModule?.updateTypewriterLanguage) {
+      effectsModule.updateTypewriterLanguage(lang);
+    }
+  });
 };
 
 if (document.readyState === 'loading') {

@@ -1,0 +1,26 @@
+[
+    {
+        "question": "Which browsers are supported?",
+        "answer": "We recommend the latest Chrome, Firefox, or Edge. IE is not supported due to ES6 modules and Web Workers."
+    },
+    {
+        "question": "How do I run the graph platform locally?",
+        "answer": "Use the <code>start_server.bat</code> script, or run <code>python -m http.server 8080</code>, then visit <code>http://127.0.0.1:8080</code>. See the <a href='/docs.html?doc=getting-started/installation.md'>installation docs</a>."
+    },
+    {
+        "question": "What graph algorithms are supported?",
+        "answer": "Currently supports 15+ algorithms, including BFS/DFS, shortest paths (Dijkstra), max flow (Ford-Fulkerson), graph coloring, connectivity checks, and more. See the documentation for details."
+    },
+    {
+        "question": "How do I export to LaTeX/TikZ?",
+        "answer": "Click the Export button in the toolbar and choose the TikZ option to generate LaTeX code."
+    },
+    {
+        "question": "How can I send feedback?",
+        "answer": "Use the feedback form at the bottom of the homepage to submit issues or suggestions."
+    },
+    {
+        "question": "Can I download the source code?",
+        "answer": "Yes. The project is open source on GitHub. Visit the <a href='https://github.com/shubeipishu/website_development' target='_blank'>repository</a>."
+    }
+]

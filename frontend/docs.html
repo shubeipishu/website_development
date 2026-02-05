@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="文档中心 - 项目使用指南与技术文档">
-    <title>文档中心 - 树皮斑马</title>
+    <meta name="description" content="文档中心 - 项目使用指南与技术文档" data-i18n-attr="content:docs.meta.desc">
+    <title data-i18n="docs.page.title">文档中心 - 树皮斑马</title>
 
     <!-- 主题预设，避免闪烁 -->
     <script>
@@ -46,17 +46,18 @@
             <a href="/" class="nav-logo">
                 <img src="favicon.svg" alt="Logo" class="nav-logo-img"
                     style="height: 28px; margin-right: 8px; vertical-align: middle;">
-                树皮斑马
+                <span data-i18n="nav.brand">树皮斑马</span>
             </a>
 
             <ul class="nav-links">
-                <li><a href="/#projects">项目</a></li>
-                <li><a href="docs.html" class="active">文档</a></li>
-                <li><a href="/#faq">FAQ</a></li>
-                <li><a href="/#feedback">反馈</a></li>
+                <li><a href="/#projects" data-i18n="nav.projects">项目</a></li>
+                <li><a href="docs.html" class="active" data-i18n="nav.docs">文档</a></li>
+                <li><a href="/#faq" data-i18n="nav.faq">FAQ</a></li>
+                <li><a href="/#feedback" data-i18n="nav.feedback">反馈</a></li>
             </ul>
 
             <div class="nav-actions">
+                <button id="lang-toggle" class="lang-toggle" aria-label="切换语言" data-i18n-attr="aria-label:nav.lang.aria">EN</button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">🌙</button>
             </div>
         </div>
@@ -69,9 +70,9 @@
                  ============================================================ -->
             <aside class="docs-sidebar">
                 <div class="sidebar-header">
-                    <div class="sidebar-title">📚 文档中心</div>
+                    <div class="sidebar-title" data-i18n="docs.title">📚 文档中心</div>
                     <div class="sidebar-search">
-                        <input type="text" id="docs-search" placeholder="搜索文档...">
+                        <input type="text" id="docs-search" placeholder="搜索文档..." data-i18n-attr="placeholder:docs.search.placeholder">
                     </div>
                 </div>
 
@@ -88,7 +89,7 @@
                  ============================================================ -->
             <article class="docs-content">
                 <header class="docs-header">
-                    <h1 id="docs-title">选择一篇文档</h1>
+                    <h1 id="docs-title" data-i18n="docs.header.placeholder">选择一篇文档</h1>
                     <!-- 下载按钮已移除，统一在侧边栏提供 -->
                 </header>
 
@@ -96,8 +97,8 @@
                     <!-- 文档内容由 JS 动态加载 -->
                     <div class="docs-empty">
                         <div class="docs-empty-icon">📖</div>
-                        <div class="docs-empty-title">欢迎来到文档中心</div>
-                        <div class="docs-empty-desc">请从左侧导航选择一篇文档开始阅读</div>
+                        <div class="docs-empty-title" data-i18n="docs.empty.title">欢迎来到文档中心</div>
+                        <div class="docs-empty-desc" data-i18n="docs.empty.desc">请从左侧导航选择一篇文档开始阅读</div>
                     </div>
                 </div>
             </article>
