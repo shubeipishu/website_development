@@ -1,8 +1,10 @@
 import '@/styles/main.css';
 import '@/styles/docs.css';
+import { initTheme } from '@/shared/theme';
 
 // 引入 marked.js 和 highlight.js (CDN)
-let markedLoaded = false;
+let _markedLoaded = false;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let hljs: any = null;
 
 const init = async () => {
@@ -12,7 +14,7 @@ const init = async () => {
     console.warn('Failed to load external dependencies, continuing without them:', error);
   }
   await loadDocsConfig();
-  initTheme();
+  initTheme({ onThemeChange: syncHighlightTheme });
   initSearch();
   scheduleEnhancers();
 };
@@ -31,7 +33,7 @@ if (document.readyState === 'loading') {
 async function loadDependencies() {
   // 加载 marked.js（核心渲染）
   await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
-  markedLoaded = true;
+  _markedLoaded = true;
 
   // 配置 marked（高亮在增强模块加载后再处理）
   const win = window as Window & { marked?: any };
@@ -102,65 +104,8 @@ function loadCSS(href: string) {
 }
 
 /* ============================================================
-   主题切换
+   同步代码高亮主题
    ============================================================ */
-function initTheme() {
-  const themeToggle = document.getElementById('theme-toggle');
-  const TRANSITION_MS = 300;
-  const STORAGE_KEY = 'site-theme';
-
-  // 从 localStorage 读取，如果没有则默认 light
-  const savedTheme = localStorage.getItem(STORAGE_KEY) || 'light';
-
-  const applyTheme = (theme: string) => {
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
-    syncHighlightTheme(theme);
-  };
-
-  applyTheme(savedTheme);
-
-  // 处理页面缓存恢复
-  window.addEventListener('pageshow', (e) => {
-    if (e.persisted) {
-      const theme = localStorage.getItem(STORAGE_KEY) || 'light';
-      applyTheme(theme);
-    }
-  });
-  // 跨标签页同步主题
-  window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) {
-      const theme = e.newValue || 'light';
-      applyTheme(theme);
-    }
-  });
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-      document.documentElement.classList.add('theme-transition');
-      document.documentElement.setAttribute('data-theme', newTheme);
-      updateThemeIcon(newTheme);
-
-      // 保存到 localStorage
-      localStorage.setItem(STORAGE_KEY, newTheme);
-
-      setTimeout(() => {
-        document.documentElement.classList.remove('theme-transition');
-      }, TRANSITION_MS);
-    });
-  }
-}
-
-function updateThemeIcon(theme: string) {
-  const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-}
-
 function syncHighlightTheme(theme: string) {
   const hljsLink = document.getElementById('hljs-theme') as HTMLLinkElement | null;
   if (!hljsLink) return;
@@ -223,8 +168,8 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
                 <div class="nav-section-title">${section.title}</div>
                 <ul class="nav-list">
                     ${section.items
-                      .map(
-                        (item) => `
+        .map(
+          (item) => `
                         <li class="nav-item">
                             <a href="?doc=${encodeURIComponent(item.file)}" 
                                class="nav-link" 
@@ -234,8 +179,8 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
                             </a>
                         </li>
                     `
-                      )
-                      .join('')}
+        )
+        .join('')}
                 </ul>
             </div>
         `;
@@ -248,8 +193,8 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
                 <div class="nav-section-title">📥 下载</div>
                 <ul class="nav-list">
                     ${config.downloads
-                      .map(
-                        (item) => `
+        .map(
+          (item) => `
                         <li class="nav-item">
                             <a href="/docs/downloads/${item.file}" 
                                class="download-link" 
@@ -259,8 +204,8 @@ function renderSidebar(config: { sections: Array<{ title: string; items: Array<{
                             </a>
                         </li>
                     `
-                      )
-                      .join('')}
+        )
+        .join('')}
                 </ul>
             </div>
         `;

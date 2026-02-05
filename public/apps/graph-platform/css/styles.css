@@ -1,8 +1,8 @@
 /* --- START OF FILE css/styles.css --- */
 
 :root {
-    --primary: #6366f1;
-    --primary-light: #e0e7ff;
+    --primary: #8b5cf6;
+    --primary-light: #ede9fe;
     --bg: #f3f4f6;
     --bg-canvas: #f9fafb;
     --text-main: #111827;
@@ -16,8 +16,8 @@
 
 /* 暗色主题变量 */
 [data-theme="dark"] {
-    --primary: #818cf8;
-    --primary-light: #4c1d95;
+    --primary: #a78bfa;
+    --primary-light: #5b21b6;
     --bg: #111827;
     --bg-canvas: #1f2937;
     --text-main: #f9fafb;
