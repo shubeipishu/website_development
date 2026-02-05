@@ -1,4 +1,6 @@
 import '@/styles/main.css';
+import { loadChangelog } from './changelog';
+import { initFAQ, loadFAQData } from './faq';
 
 const init = () => {
   initTheme();
@@ -75,112 +77,6 @@ function updateThemeIcon(theme: string) {
   if (themeToggle) {
     themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
-}
-
-/* ============================================================
-   FAQ 折叠面板
-   ============================================================ */
-function initFAQ() {
-  document.querySelectorAll('.faq-question').forEach((button) => {
-    button.addEventListener('click', () => {
-      const item = button.closest<HTMLElement>('.faq-item');
-      if (!item) return;
-
-      const isActive = item.classList.contains('active');
-
-      // 关闭其他打开的项
-      document.querySelectorAll('.faq-item.active').forEach((activeItem) => {
-        activeItem.classList.remove('active');
-      });
-
-      // 切换当前项
-      if (!isActive) {
-        item.classList.add('active');
-      }
-    });
-  });
-}
-
-/* ============================================================
-   加载 FAQ 数据
-   ============================================================ */
-async function loadFAQData() {
-  const faqList = document.getElementById('faq-list');
-  if (!faqList) return;
-
-  try {
-    const response = await fetch('/data/faq.json');
-    if (!response.ok) return;
-
-    const faqData = await response.json();
-    renderFAQ(faqData);
-  } catch (error) {
-    console.log('FAQ data not available, using static content');
-  }
-}
-
-function renderFAQ(faqData: Array<{ question: string; answer: string }>) {
-  const faqList = document.getElementById('faq-list');
-  if (!faqList || !faqData.length) return;
-
-  faqList.innerHTML = faqData
-    .map(
-      (item) => `
-        <div class="faq-item">
-            <button class="faq-question">
-                <span>${item.question}</span>
-                <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">${item.answer}</div>
-            </div>
-        </div>
-    `
-    )
-    .join('');
-
-  // 重新绑定事件
-  initFAQ();
-}
-
-/* ============================================================
-   加载更新日志
-   ============================================================ */
-async function loadChangelog() {
-  const changelogList = document.getElementById('changelog-list');
-  if (!changelogList) return;
-
-  try {
-    const response = await fetch('/data/changelog.json');
-    if (!response.ok) return;
-
-    const changelog = await response.json();
-    renderChangelog(changelog);
-  } catch (error) {
-    console.log('Changelog data not available, using static content');
-  }
-}
-
-function renderChangelog(
-  changelog: Array<{ date: string; title: string; description?: string }>
-) {
-  const changelogList = document.getElementById('changelog-list');
-  if (!changelogList || !changelog.length) return;
-
-  changelogList.innerHTML = changelog
-    .slice(0, 5)
-    .map(
-      (item) => `
-        <div class="changelog-item">
-            <span class="changelog-date">${item.date}</span>
-            <div class="changelog-content">
-                <div class="changelog-title">${item.title}</div>
-                <div class="changelog-desc">${item.description || ''}</div>
-            </div>
-        </div>
-    `
-    )
-    .join('');
 }
 
 /* ============================================================
@@ -283,19 +179,18 @@ async function loadVisitCount() {
 }
 
 /* ============================================================
-   延迟加载视觉效果脚本
+   延迟加载视觉效果模块
    ============================================================ */
+let effectsLoaded = false;
 function loadEffectsLazy() {
   const canvas = document.getElementById('particle-canvas');
-  if (!canvas) return;
+  if (!canvas || effectsLoaded) return;
 
-  const load = () => {
-    if (document.getElementById('effects-script')) return;
-    const script = document.createElement('script');
-    script.id = 'effects-script';
-    script.src = 'js/effects.js';
-    script.defer = true;
-    document.body.appendChild(script);
+  const load = async () => {
+    if (effectsLoaded) return;
+    effectsLoaded = true;
+    const module = await import('./effects');
+    module.initEffects();
   };
 
   const win = window as Window & {
