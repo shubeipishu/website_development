@@ -182,15 +182,22 @@ async function loadVisitCount() {
    延迟加载视觉效果模块
    ============================================================ */
 let effectsLoaded = false;
+let effectsLoading = false;
 function loadEffectsLazy() {
   const canvas = document.getElementById('particle-canvas');
-  if (!canvas || effectsLoaded) return;
+  if (!canvas || effectsLoaded || effectsLoading) return;
 
   const load = async () => {
-    if (effectsLoaded) return;
-    effectsLoaded = true;
-    const module = await import('./effects');
-    module.initEffects();
+    if (effectsLoaded || effectsLoading) return;
+    effectsLoading = true;
+    try {
+      const module = await import('./effects');
+      module.initEffects();
+      effectsLoaded = true;
+    } catch (error) {
+      console.warn('Failed to load effects module:', error);
+      effectsLoading = false;
+    }
   };
 
   const win = window as Window & {
@@ -199,9 +206,12 @@ function loadEffectsLazy() {
 
   if (win.requestIdleCallback) {
     win.requestIdleCallback(load, { timeout: 1500 });
+    setTimeout(load, 2000);
   } else {
     setTimeout(load, 600);
   }
+
+  window.addEventListener('load', load, { once: true });
 }
 
 /* ============================================================
