@@ -1,12 +1,111 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="文档中心 - 项目使用指南与技术文档">
     <title>文档中心 - 树皮斑马</title>
-  </head>
-  <body>
-    <div id="app"></div>
+
+    <!-- 主题预设，避免闪烁 -->
+    <script>
+        (function () {
+            const key = 'site-theme';
+            const theme = localStorage.getItem(key) || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.id = 'hljs-theme';
+            const base = 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/';
+            link.href = base + (theme === 'dark' ? 'github-dark.min.css' : 'github.min.css');
+            document.head.appendChild(link);
+        })();
+    </script>
+
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- 样式 -->
+    
+    
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="logo.png">
+</head>
+
+<body>
+    <!-- ============================================================
+         导航栏
+         ============================================================ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="nav-logo">
+                <img src="favicon.svg" alt="Logo" class="nav-logo-img"
+                    style="height: 28px; margin-right: 8px; vertical-align: middle;">
+                树皮斑马
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="/#projects">项目</a></li>
+                <li><a href="docs.html" class="active">文档</a></li>
+                <li><a href="/#faq">FAQ</a></li>
+                <li><a href="/#feedback">反馈</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="docs-layout">
+            <!-- ============================================================
+                 左侧导航
+                 ============================================================ -->
+            <aside class="docs-sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">📚 文档中心</div>
+                    <div class="sidebar-search">
+                        <input type="text" id="docs-search" placeholder="搜索文档...">
+                    </div>
+                </div>
+
+                <nav id="docs-nav">
+                    <!-- 导航由 JS 动态生成 -->
+                    <div class="docs-loading" style="padding: 2rem;">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- ============================================================
+                 右侧内容
+                 ============================================================ -->
+            <article class="docs-content">
+                <header class="docs-header">
+                    <h1 id="docs-title">选择一篇文档</h1>
+                    <!-- 下载按钮已移除，统一在侧边栏提供 -->
+                </header>
+
+                <div id="docs-content">
+                    <!-- 文档内容由 JS 动态加载 -->
+                    <div class="docs-empty">
+                        <div class="docs-empty-icon">📖</div>
+                        <div class="docs-empty-title">欢迎来到文档中心</div>
+                        <div class="docs-empty-desc">请从左侧导航选择一篇文档开始阅读</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- 脚本 -->
     <script type="module" src="/src/pages/docs/main.ts"></script>
-  </body>
+</body>
+
 </html>
