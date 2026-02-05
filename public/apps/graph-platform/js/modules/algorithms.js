@@ -28,14 +28,20 @@ export class Algorithms {
     handleWorkerMessage(e) {
         const { type, data } = e.data;
         this.isCalculating = false;
+        const i18n = window.GraphI18n;
+        const t = (key, vars) => (i18n?.t ? i18n.t(key, vars) : key);
 
         if (type === 'result') {
             this.app.ui.setVal('val-max-deg', data.degrees.max);
             this.app.ui.setVal('val-min-deg', data.degrees.min);
             this.app.ui.setVal('val-avg-deg', typeof data.degrees.avg === 'number' ? data.degrees.avg.toFixed(2) : '-');
 
-            this.app.ui.setVal('val-v-conn', data.connectivity.kappa);
-            this.app.ui.setVal('val-e-conn', data.connectivity.lambda);
+            this.app.connVal = {
+                kappa: data.connectivity.kappa,
+                lambda: data.connectivity.lambda
+            };
+            this.app.ui.setVal('val-v-conn', this.formatSlowValue(data.connectivity.kappa, t));
+            this.app.ui.setVal('val-e-conn', this.formatSlowValue(data.connectivity.lambda, t));
             this.app.connData = {
                 cutNodes: new Set(data.connectivity.cutNodes),
                 cutEdges: data.connectivity.cutEdges
@@ -50,25 +56,7 @@ export class Algorithms {
             const btnCycle = document.getElementById('btn-vis-ham-cycle');
             const valCycle = document.getElementById('val-ham-cycle');
 
-            if (this.app.hamData.msg.includes('skip')) {
-                valPath.innerText = "Slow"; btnPath.classList.add('disabled');
-                valCycle.innerText = "Slow"; btnCycle.classList.add('disabled');
-            } else {
-                btnPath.classList.remove('disabled');
-                btnCycle.classList.remove('disabled');
-
-                if (this.app.hamData.path) {
-                    valPath.innerText = "Yes"; valPath.style.color = '#10b981';
-                } else {
-                    valPath.innerText = "No"; valPath.style.color = '#ef4444';
-                }
-
-                if (this.app.hamData.cycle) {
-                    valCycle.innerText = "Yes"; valCycle.style.color = '#10b981';
-                } else {
-                    valCycle.innerText = "No"; valCycle.style.color = '#ef4444';
-                }
-            }
+            this.updateHamLabels(t);
 
             this.app.ui.renderMat(data.matrices.adj, 'adj-mat');
             this.app.ui.renderMat(data.matrices.lap, 'lap-mat');
@@ -79,6 +67,57 @@ export class Algorithms {
 
             if (this.app.visMode) this.updVis(this.app.visMode, false);
         }
+    }
+
+    formatSlowValue(value, t) {
+        if (typeof value === 'string' && value.includes('skip')) {
+            const match = value.match(/>(\\d+)/);
+            if (match) return t('stats.slow', { n: match[1] });
+            return t('common.slow');
+        }
+        return value;
+    }
+
+    updateHamLabels(t) {
+        const btnPath = document.getElementById('btn-vis-ham-path');
+        const valPath = document.getElementById('val-ham-path');
+        const btnCycle = document.getElementById('btn-vis-ham-cycle');
+        const valCycle = document.getElementById('val-ham-cycle');
+
+        if (!this.app.hamData) return;
+
+        if (this.app.hamData.msg && this.app.hamData.msg.includes('skip')) {
+            valPath.innerText = t('common.slow'); btnPath.classList.add('disabled');
+            valCycle.innerText = t('common.slow'); btnCycle.classList.add('disabled');
+            return;
+        }
+
+        btnPath.classList.remove('disabled');
+        btnCycle.classList.remove('disabled');
+
+        if (this.app.hamData.path) {
+            valPath.innerText = t('vis.found'); valPath.style.color = '#10b981';
+        } else {
+            valPath.innerText = t('vis.notFound'); valPath.style.color = '#ef4444';
+        }
+
+        if (this.app.hamData.cycle) {
+            valCycle.innerText = t('vis.found'); valCycle.style.color = '#10b981';
+        } else {
+            valCycle.innerText = t('vis.notFound'); valCycle.style.color = '#ef4444';
+        }
+    }
+
+    applyI18n() {
+        const i18n = window.GraphI18n;
+        const t = (key, vars) => (i18n?.t ? i18n.t(key, vars) : key);
+
+        if (this.app.connVal) {
+            this.app.ui.setVal('val-v-conn', this.formatSlowValue(this.app.connVal.kappa, t));
+            this.app.ui.setVal('val-e-conn', this.formatSlowValue(this.app.connVal.lambda, t));
+        }
+        this.updateHamLabels(t);
+        if (this.app.visMode) this.updVis(this.app.visMode, false);
     }
 
     updateData() {
@@ -165,22 +204,24 @@ export class Algorithms {
 
     updVis(t, animate = true) {
         const l = document.getElementById('vis-label'), v = document.getElementById('vis-value');
-        if (t === 'coloring') { l.innerText = 'Chromatic Number'; v.innerText = 'χ(G) = ' + document.getElementById('val-chi').innerText; this.app.visData = this.app.colData; }
-        else if (t === 'edgeColor') { l.innerText = 'Edge Index'; v.innerText = "χ'(G) = " + document.getElementById('val-chi-edge').innerText; this.app.visData = this.app.edgeColData; }
-        else if (t === 'mis') { l.innerText = 'Independence Number'; v.innerText = 'α(G) = ' + document.getElementById('val-alpha').innerText; this.app.visData = this.app.misData; }
-        else if (t === 'diameter') { l.innerText = 'Diameter'; v.innerText = 'diam(G) = ' + document.getElementById('val-diam').innerText; this.app.visData = null; }
-        else if (t === 'dist') { l.innerText = 'Distance'; v.innerText = 'dist = ' + document.getElementById('val-dist').innerText; this.app.visData = null; }
-        else if (t === 'kappa') { l.innerText = 'Vertex Connectivity'; v.innerText = 'κ = ' + document.getElementById('val-v-conn').innerText; this.app.visData = this.app.connData; }
-        else if (t === 'lambda') { l.innerText = 'Edge Connectivity'; v.innerText = 'λ = ' + document.getElementById('val-e-conn').innerText; this.app.visData = this.app.connData; }
+        const i18n = window.GraphI18n;
+        const tr = (key, vars) => (i18n?.t ? i18n.t(key, vars) : key);
+        if (t === 'coloring') { l.innerText = tr('vis.chromatic'); v.innerText = 'χ(G) = ' + document.getElementById('val-chi').innerText; this.app.visData = this.app.colData; }
+        else if (t === 'edgeColor') { l.innerText = tr('vis.edgeChromatic'); v.innerText = "χ'(G) = " + document.getElementById('val-chi-edge').innerText; this.app.visData = this.app.edgeColData; }
+        else if (t === 'mis') { l.innerText = tr('vis.independence'); v.innerText = 'α(G) = ' + document.getElementById('val-alpha').innerText; this.app.visData = this.app.misData; }
+        else if (t === 'diameter') { l.innerText = tr('vis.diameter'); v.innerText = 'diam(G) = ' + document.getElementById('val-diam').innerText; this.app.visData = null; }
+        else if (t === 'dist') { l.innerText = tr('vis.distance'); v.innerText = 'dist = ' + document.getElementById('val-dist').innerText; this.app.visData = null; }
+        else if (t === 'kappa') { l.innerText = tr('vis.vertexConnectivity'); v.innerText = 'κ = ' + document.getElementById('val-v-conn').innerText; this.app.visData = this.app.connData; }
+        else if (t === 'lambda') { l.innerText = tr('vis.edgeConnectivity'); v.innerText = 'λ = ' + document.getElementById('val-e-conn').innerText; this.app.visData = this.app.connData; }
         else if (t === 'ham-path') {
-            l.innerText = 'Hamiltonian Path';
-            if (this.app.hamData && this.app.hamData.path) { v.innerText = 'Found (Len: ' + (this.app.nodes.length) + ')'; this.app.visData = this.app.hamData.path; }
-            else { v.innerText = 'Not Found'; this.app.visData = null; }
+            l.innerText = tr('vis.hamPath');
+            if (this.app.hamData && this.app.hamData.path) { v.innerText = tr('vis.foundLen', { n: this.app.nodes.length }); this.app.visData = this.app.hamData.path; }
+            else { v.innerText = tr('vis.notFound'); this.app.visData = null; }
         }
         else if (t === 'ham-cycle') {
-            l.innerText = 'Hamiltonian Cycle';
-            if (this.app.hamData && this.app.hamData.cycle) { v.innerText = 'Found (Cycle)'; this.app.visData = this.app.hamData.cycle; }
-            else { v.innerText = 'Not Found'; this.app.visData = null; }
+            l.innerText = tr('vis.hamCycle');
+            if (this.app.hamData && this.app.hamData.cycle) { v.innerText = tr('vis.foundCycle'); this.app.visData = this.app.hamData.cycle; }
+            else { v.innerText = tr('vis.notFound'); this.app.visData = null; }
         }
     }
 }

@@ -4,6 +4,8 @@ export class UI {
         this.panelOpen = true;
     }
 
+    getI18n() { return window.GraphI18n; }
+
     setVal(id, val) { const el = document.getElementById(id); if (el) { el.innerText = val; el.style.color = ''; } }
 
     renderMath(id, tex) { const el = document.getElementById(id); if (el && window.katex) katex.render(tex, el, { throwOnError: false }); }
@@ -55,6 +57,7 @@ export class UI {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         const TRANSITION_MS = 300;
+        const i18n = this.getI18n();
 
         // Start transition in App state
         this.app.themeTransition = {
@@ -70,10 +73,10 @@ export class UI {
         const btn = document.getElementById('btn-theme');
         if (newTheme === 'dark') {
             btn.innerHTML = '<i class="fas fa-sun"></i>';
-            btn.setAttribute('data-tooltip', '切换为亮色主题');
+            btn.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.theme.light') : '切换为亮色主题');
         } else {
             btn.innerHTML = '<i class="fas fa-moon"></i>';
-            btn.setAttribute('data-tooltip', '切换为暗色主题');
+            btn.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.theme.dark') : '切换为暗色主题');
         }
 
         setTimeout(() => {
@@ -85,12 +88,25 @@ export class UI {
         const defaultTheme = 'light';
         document.documentElement.setAttribute('data-theme', defaultTheme);
         const btn = document.getElementById('btn-theme');
+        const i18n = this.getI18n();
         if (defaultTheme === 'dark') {
             btn.innerHTML = '<i class="fas fa-sun"></i>';
-            btn.setAttribute('data-tooltip', '切换为亮色主题');
+            btn.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.theme.light') : '切换为亮色主题');
         } else {
             btn.innerHTML = '<i class="fas fa-moon"></i>';
-            btn.setAttribute('data-tooltip', '切换为暗色主题');
+            btn.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.theme.dark') : '切换为暗色主题');
+        }
+    }
+
+    syncI18n() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const btn = document.getElementById('btn-theme');
+        const i18n = this.getI18n();
+        if (!btn || !i18n?.t) return;
+        if (currentTheme === 'dark') {
+            btn.setAttribute('data-tooltip', i18n.t('tooltip.theme.light'));
+        } else {
+            btn.setAttribute('data-tooltip', i18n.t('tooltip.theme.dark'));
         }
     }
 
@@ -113,21 +129,23 @@ export class UI {
         }
 
         let html = '';
+        const i18n = this.getI18n();
+        const t = (key) => (i18n?.t ? i18n.t(key) : key);
         const hasSel = this.app.selNodes.size > 0 || this.app.selEdges.size > 0;
         if (hasSel) {
-            html += `<div class="ctx-item" onclick="app.copySelection()"><i class="fas fa-copy"></i> <span class="ctx-text">复制 (Copy)</span> <span class="ctx-shortcut">Ctrl+C</span></div>`;
-            html += `<div class="ctx-item" onclick="app.duplicateSelection()"><i class="fas fa-clone"></i> <span class="ctx-text">副本 (Duplicate)</span> <span class="ctx-shortcut">Ctrl+D</span></div>`;
-            html += `<div class="ctx-item" onclick="app.cutSelection()"><i class="fas fa-cut"></i> <span class="ctx-text">剪切 (Cut)</span> <span class="ctx-shortcut">Ctrl+X</span></div>`;
+            html += `<div class="ctx-item" onclick="app.copySelection()"><i class="fas fa-copy"></i> <span class="ctx-text">${t('ctx.copy')}</span> <span class="ctx-shortcut">Ctrl+C</span></div>`;
+            html += `<div class="ctx-item" onclick="app.duplicateSelection()"><i class="fas fa-clone"></i> <span class="ctx-text">${t('ctx.duplicate')}</span> <span class="ctx-shortcut">Ctrl+D</span></div>`;
+            html += `<div class="ctx-item" onclick="app.cutSelection()"><i class="fas fa-cut"></i> <span class="ctx-text">${t('ctx.cut')}</span> <span class="ctx-shortcut">Ctrl+X</span></div>`;
             html += `<div class="ctx-sep"></div>`;
-            html += `<div class="ctx-item" onclick="app.deleteSelectionAction()"><i class="fas fa-trash-alt"></i> <span class="ctx-text">删除 (Delete)</span> <span class="ctx-shortcut">Del</span></div>`;
+            html += `<div class="ctx-item" onclick="app.deleteSelectionAction()"><i class="fas fa-trash-alt"></i> <span class="ctx-text">${t('ctx.delete')}</span> <span class="ctx-shortcut">Del</span></div>`;
         }
         if (this.app.clipboard) {
             if (hasSel) html += `<div class="ctx-sep"></div>`;
-            html += `<div class="ctx-item" onclick="app.pasteFromMenu()"><i class="fas fa-paste"></i> <span class="ctx-text">粘贴 (Paste)</span> <span class="ctx-shortcut">Ctrl+V</span></div>`;
+            html += `<div class="ctx-item" onclick="app.pasteFromMenu()"><i class="fas fa-paste"></i> <span class="ctx-text">${t('ctx.paste')}</span> <span class="ctx-shortcut">Ctrl+V</span></div>`;
         }
 
         if (html !== '') html += `<div class="ctx-sep"></div>`;
-        html += `<div class="ctx-item" onclick="app.exporter.exportToTikZ()"><i class="fas fa-code"></i> <span class="ctx-text">导出 TikZ</span></div>`;
+        html += `<div class="ctx-item" onclick="app.exporter.exportToTikZ()"><i class="fas fa-code"></i> <span class="ctx-text">${t('ctx.exportTikz')}</span></div>`;
 
         if (html === '') return;
 

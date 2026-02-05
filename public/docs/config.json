@@ -1,31 +1,52 @@
 {
     "sections": [
         {
-            "title": "图论科研平台 Pro",
+            "title": {
+                "zh": "图论科研平台 Pro",
+                "en": "Graph Platform Pro"
+            },
             "items": [
                 {
-                    "title": "概述",
+                    "title": {
+                        "zh": "概述",
+                        "en": "Overview"
+                    },
                     "file": "getting-started/overview.md"
                 },
                 {
-                    "title": "安装与运行",
+                    "title": {
+                        "zh": "安装与运行",
+                        "en": "Installation & Run"
+                    },
                     "file": "getting-started/installation.md"
                 },
                 {
-                    "title": "图形编辑",
+                    "title": {
+                        "zh": "图形编辑",
+                        "en": "Graph Editing"
+                    },
                     "file": "features/graph-editing.md"
                 },
                 {
-                    "title": "图指标与可视化",
+                    "title": {
+                        "zh": "图指标与可视化",
+                        "en": "Graph Metrics & Visualization"
+                    },
                     "file": "features/algorithms.md"
                 }
             ]
         },
         {
-            "title": "其他项目",
+            "title": {
+                "zh": "其他项目",
+                "en": "Other Projects"
+            },
             "items": [
                 {
-                    "title": "开发中...",
+                    "title": {
+                        "zh": "开发中...",
+                        "en": "In Progress..."
+                    },
                     "file": "placeholder.md"
                 }
             ]
@@ -33,11 +54,17 @@
     ],
     "downloads": [
         {
-            "name": "完整文档 (Markdown)",
+            "name": {
+                "zh": "完整文档 (Markdown)",
+                "en": "Full Documentation (Markdown)"
+            },
             "file": "graph-platform-guide.md"
         },
         {
-            "name": "快速参考卡",
+            "name": {
+                "zh": "快速参考卡",
+                "en": "Quick Reference Card"
+            },
             "file": "quick-reference.md"
         }
     ]

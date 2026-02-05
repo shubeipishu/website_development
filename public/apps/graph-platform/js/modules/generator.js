@@ -5,33 +5,68 @@ export class Generator {
         this.currentGenType = null;
     }
 
-    renderGenSidebar() {
+    renderGenSidebar(selectedId = null) {
         const sb = document.getElementById('gen-sidebar-list');
+        const i18n = window.GraphI18n;
+        const lang = i18n?.getLang ? i18n.getLang() : 'zh';
+        const pick = (val) => {
+            if (!val) return '';
+            if (typeof val === 'string') return val;
+            return val[lang] || val.zh || '';
+        };
+
         sb.innerHTML = ''; let firstItem = null;
         GRAPH_CONFIG.forEach(cat => {
-            const catEl = document.createElement('div'); catEl.className = 'gen-category-title'; catEl.innerText = cat.category; sb.appendChild(catEl);
-            cat.items.forEach(item => { if (!firstItem) firstItem = item; const el = document.createElement('div'); el.className = 'gen-item'; el.dataset.id = item.id; el.innerHTML = `<span>${item.name}</span>`; el.onclick = () => this.selectGenType(item); sb.appendChild(el); });
+            const catEl = document.createElement('div'); catEl.className = 'gen-category-title'; catEl.innerText = pick(cat.category); sb.appendChild(catEl);
+            cat.items.forEach(item => {
+                if (!firstItem) firstItem = item;
+                const el = document.createElement('div');
+                el.className = 'gen-item';
+                el.dataset.id = item.id;
+                const nameText = pick(item.name);
+                el.innerHTML = `<span>${nameText}</span>`;
+                el.title = nameText;
+                el.onclick = () => this.selectGenType(item);
+                sb.appendChild(el);
+            });
         });
+        const targetId = selectedId || (this.currentGenType && this.currentGenType.id);
+        if (targetId) {
+            const target = GRAPH_CONFIG.flatMap(c => c.items).find(i => i.id === targetId);
+            if (target) {
+                this.selectGenType(target);
+                return;
+            }
+        }
         if (firstItem) this.selectGenType(firstItem);
     }
 
     selectGenType(item) {
+        const i18n = window.GraphI18n;
+        const lang = i18n?.getLang ? i18n.getLang() : 'zh';
+        const pick = (val) => {
+            if (!val) return '';
+            if (typeof val === 'string') return val;
+            return val[lang] || val.zh || '';
+        };
+
         this.currentGenType = item;
         document.querySelectorAll('.gen-item').forEach(el => el.classList.toggle('selected', el.dataset.id === item.id));
-        document.getElementById('gen-display-name').innerText = item.name;
+        document.getElementById('gen-display-name').innerText = pick(item.name);
 
-        this.app.ui.renderDescWithLatex('gen-display-desc', item.desc);
+        this.app.ui.renderDescWithLatex('gen-display-desc', pick(item.desc));
 
         const texBadge = document.getElementById('gen-display-tex');
         if (window.katex) katex.render(item.latex, texBadge, { throwOnError: false });
 
         const container = document.getElementById('gen-input-container'); container.innerHTML = '';
         if (item.params.length === 0) {
-            container.innerHTML = '<div style="color:#9ca3af; font-style:italic; font-size:14px;">该图无需额外参数配置。</div>';
+            const msg = i18n?.t ? i18n.t('gen.noParams') : '该图无需额外参数配置。';
+            container.innerHTML = `<div style="color:#9ca3af; font-style:italic; font-size:14px;">${msg}</div>`;
         } else {
             item.params.forEach(p => {
                 const group = document.createElement('div'); group.className = 'gen-input-group';
-                const label = document.createElement('label'); label.className = 'gen-input-label'; label.innerText = p.label;
+                const label = document.createElement('label'); label.className = 'gen-input-label'; label.innerText = pick(p.label);
                 const input = document.createElement('input'); input.type = 'number'; input.className = 'gen-input'; input.id = `gen-p-${p.id}`; input.value = p.def; input.min = p.min || 0; if (p.max) input.max = p.max;
                 group.appendChild(label); group.appendChild(input); container.appendChild(group);
             });

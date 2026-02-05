@@ -204,6 +204,12 @@ body.mode-connect canvas {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+#btn-lang {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
 [data-theme="dark"] .tool-btn:hover {
     background: #374151;
     color: var(--primary);
@@ -685,8 +691,8 @@ canvas {
     font-size: 11px;
     font-weight: 700;
     color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: none;
+    letter-spacing: 0.2px;
     margin-top: 8px;
 }
 
@@ -702,10 +708,19 @@ canvas {
     border-left: 3px solid transparent;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    gap: 8px;
+}
+
+.gen-item span {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.3;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .gen-item::before {

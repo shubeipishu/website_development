@@ -1,9 +1,13 @@
-export async function loadChangelog() {
+export async function loadChangelog(lang: 'zh' | 'en' = 'zh') {
   const changelogList = document.getElementById('changelog-list');
   if (!changelogList) return;
 
   try {
-    const response = await fetch('/data/changelog.json');
+    const primaryUrl = lang === 'en' ? '/data/changelog.en.json' : '/data/changelog.json';
+    let response = await fetch(primaryUrl);
+    if (!response.ok && lang === 'en') {
+      response = await fetch('/data/changelog.json');
+    }
     if (!response.ok) return;
 
     const changelog = await response.json();

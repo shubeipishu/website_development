@@ -9,7 +9,7 @@
 
 最简单的方式是直接访问在线版本，无需任何安装：
 
-👉 [立即体验图论科研平台 Pro](/apps/graph-platform/)
+👉 <a href="/apps/graph-platform/" target="_blank" rel="noopener noreferrer">立即体验图论科研平台 Pro</a>
 
 ---
 

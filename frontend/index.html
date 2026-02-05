@@ -38,17 +38,18 @@
             <a href="/" class="nav-logo">
                 <img src="favicon.svg" alt="Logo" class="nav-logo-img"
                     style="height: 28px; margin-right: 8px; vertical-align: middle;">
-                树皮斑马
+                <span data-i18n="nav.brand">树皮斑马</span>
             </a>
 
             <ul class="nav-links">
-                <li><a href="#projects">项目</a></li>
-                <li><a href="docs.html">文档</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#feedback">反馈</a></li>
+                <li><a href="#projects" data-i18n="nav.projects">项目</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">文档</a></li>
+                <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+                <li><a href="#feedback" data-i18n="nav.feedback">反馈</a></li>
             </ul>
 
             <div class="nav-actions">
+                <button id="lang-toggle" class="lang-toggle" aria-label="切换语言" data-i18n-attr="aria-label:nav.lang.aria">EN</button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">🌙</button>
             </div>
         </div>
@@ -66,14 +67,14 @@
                 <div class="hero-content">
                     <!-- 可选：添加头像 -->
                     <!-- <img src="assets/avatar.jpg" alt="头像" class="hero-avatar"> -->
-                    <h1>你好，我是 <span id="typewriter-text">树皮斑马</span><span class="typewriter-cursor"></span> 👋</h1>
-                    <p class="hero-subtitle">
+                    <h1><span data-i18n="hero.greeting">你好，我是</span> <span id="typewriter-text">树皮斑马</span><span class="typewriter-cursor"></span> 👋</h1>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">
                         欢迎来到我的个人主页。我是一名技术爱好者，热衷于探索 Web 开发和数学可视化。
                         这里展示了我的项目和技术文档。
                     </p>
                     <div class="hero-buttons">
-                        <a href="#projects" class="btn btn-primary">🚀 浏览项目</a>
-                        <a href="docs.html" class="btn btn-secondary">📚 查看文档</a>
+                        <a href="#projects" class="btn btn-primary" data-i18n="hero.cta.projects">🚀 浏览项目</a>
+                        <a href="docs.html" class="btn btn-secondary" data-i18n="hero.cta.docs">📚 查看文档</a>
                     </div>
                 </div>
             </div>
@@ -84,7 +85,7 @@
              ============================================================ -->
         <section id="changelog" class="section">
             <div class="container">
-                <h2 class="section-title">📢 最近更新</h2>
+                <h2 class="section-title" data-i18n="section.changelog">📢 最近更新</h2>
                 <div id="changelog-list" class="changelog-list">
                     <!-- 静态fallback，JS加载后会替换 -->
                     <div class="changelog-item">
@@ -110,7 +111,7 @@
              ============================================================ -->
         <section id="projects" class="section">
             <div class="container">
-                <h2 class="section-title">🚀 我的项目</h2>
+                <h2 class="section-title" data-i18n="section.projects">🚀 我的项目</h2>
                 <div class="projects-grid">
                     <!-- 项目卡片 1: 图论平台 -->
                     <div class="project-card">
@@ -131,9 +132,9 @@
                                     <path d="M45 30 H55 M30 45 V55 M70 45 V55 M45 70 H55" stroke="white"
                                         stroke-width="4" stroke-linecap="round" />
                                 </svg>
-                                图论科研平台 Pro
+                                <span data-i18n="project.graph.title">图论科研平台 Pro</span>
                             </h3>
-                            <p class="project-desc">
+                            <p class="project-desc" data-i18n="project.graph.desc">
                                 基于 Web 的高性能图论可视化与计算工具。内置多种经典图生成器、力导向布局与交互式编辑，并提供图指标计算与高亮展示。
                             </p>
                             <div class="project-tags">
@@ -141,7 +142,7 @@
                                 <span class="tag">Canvas</span>
                                 <span class="tag">Web Worker</span>
                             </div>
-                            <a href="apps/graph-platform/index.html" class="btn btn-primary" target="_blank">
+                            <a href="apps/graph-platform/index.html" class="btn btn-primary" target="_blank" data-i18n="project.graph.cta">
                                 🚀 立即体验
                             </a>
                         </div>
@@ -153,14 +154,14 @@
                             📝
                         </div>
                         <div class="project-content">
-                            <h3 class="project-title">待开发项目</h3>
-                            <p class="project-desc">
+                            <h3 class="project-title" data-i18n="project.placeholder.title">待开发项目</h3>
+                            <p class="project-desc" data-i18n="project.placeholder.desc">
                                 这是我的下一个创意位置。无论是博客系统还是个人工具，未来将在这里展示。
                             </p>
                             <div class="project-tags">
-                                <span class="tag">Coming Soon</span>
+                                <span class="tag" data-i18n="project.placeholder.tag">Coming Soon</span>
                             </div>
-                            <button class="btn btn-secondary" disabled style="cursor: not-allowed;">
+                            <button class="btn btn-secondary" disabled style="cursor: not-allowed;" data-i18n="project.placeholder.cta">
                                 🚧 建设中
                             </button>
                         </div>
@@ -174,7 +175,7 @@
              ============================================================ -->
         <section id="faq" class="section">
             <div class="container">
-                <h2 class="section-title">❓ 常见问题</h2>
+                <h2 class="section-title" data-i18n="section.faq">❓ 常见问题</h2>
                 <div id="faq-list" class="faq-list">
                     <!-- 静态fallback，JS加载后会替换 -->
                     <div class="faq-item">
@@ -221,18 +222,18 @@
              ============================================================ -->
         <section id="feedback" class="section feedback-section">
             <div class="container">
-                <h2 class="section-title">💬 反馈与建议</h2>
+                <h2 class="section-title" data-i18n="section.feedback">💬 反馈与建议</h2>
                 <form id="feedback-form" class="feedback-form">
                     <div class="form-group">
-                        <label for="email">邮箱（可选）</label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com">
+                        <label for="email" data-i18n="feedback.email.label">邮箱（可选）</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" data-i18n-attr="placeholder:feedback.email.placeholder">
                     </div>
                     <div class="form-group">
-                        <label for="message">您的反馈 *</label>
-                        <textarea id="message" name="message" placeholder="请描述您的问题或建议..." required></textarea>
+                        <label for="message" data-i18n="feedback.message.label">您的反馈 *</label>
+                        <textarea id="message" name="message" placeholder="请描述您的问题或建议..." required data-i18n-attr="placeholder:feedback.message.placeholder"></textarea>
                     </div>
                     <div id="form-message" class="form-message"></div>
-                    <button type="submit" class="btn btn-primary form-submit">
+                    <button type="submit" class="btn btn-primary form-submit" data-i18n="feedback.submit">
                         📤 提交反馈
                     </button>
                 </form>
@@ -247,12 +248,12 @@
         <div class="container">
             <div class="footer-links">
                 <a href="https://github.com/shubeipishu/website_development" target="_blank">GitHub</a>
-                <a href="docs.html">文档中心</a>
-                <a href="#feedback">联系我</a>
+                <a href="docs.html" data-i18n="footer.docs">文档中心</a>
+                <a href="#feedback" data-i18n="footer.contact">联系我</a>
             </div>
-            <p>&copy; 2026 树皮斑马. All Rights Reserved.</p>
+            <p data-i18n="footer.rights">&copy; 2026 树皮斑马. All Rights Reserved.</p>
             <p class="visitor-count">
-                <span>👀 本站访问量: </span>
+                <span data-i18n="footer.visits">👀 本站访问量: </span>
                 <span id="visit-count">--</span>
             </p>
         </div>

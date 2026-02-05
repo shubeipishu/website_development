@@ -185,7 +185,20 @@ class GraphApp {
 
     selectAll() { this.clearSel(); this.nodes.forEach(n => this.selNodes.add(n.id)); this.edges.forEach(e => this.selEdges.add(e)); this.updateSelectionStats(); }
 
-    toggleSnap() { this.snapEnabled = !this.snapEnabled; const b = document.getElementById('btn-snap'); if (this.snapEnabled) { b.classList.add('toggle-on'); b.setAttribute('data-tooltip', '智能吸附：开'); b.style.color = '#10b981'; } else { b.classList.remove('toggle-on'); b.setAttribute('data-tooltip', '智能吸附：关'); b.style.color = '#64748b'; } }
+    toggleSnap() {
+        this.snapEnabled = !this.snapEnabled;
+        const b = document.getElementById('btn-snap');
+        const i18n = window.GraphI18n;
+        if (this.snapEnabled) {
+            b.classList.add('toggle-on');
+            b.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.snap.on') : '智能吸附：开');
+            b.style.color = '#10b981';
+        } else {
+            b.classList.remove('toggle-on');
+            b.setAttribute('data-tooltip', i18n?.t ? i18n.t('tooltip.snap.off') : '智能吸附：关');
+            b.style.color = '#64748b';
+        }
+    }
 
     // --- Proxy Methods for HTML "onclick" compatibility ---
     showGenerator() { this.generator.showGenerator(); }

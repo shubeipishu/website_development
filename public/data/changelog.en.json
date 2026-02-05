@@ -1,0 +1,32 @@
+[
+    {
+        "date": "2026-02-05",
+        "title": "Docs center now bilingual",
+        "description": "Added docs-en directory and language switch with Chinese fallback"
+    },
+    {
+        "date": "2026-02-04",
+        "title": "Homepage rebuilt with Vite + TypeScript",
+        "description": "Multi-page build and modular refactor for maintainability"
+    },
+    {
+        "date": "2026-01-28",
+        "title": "Website architecture upgrade",
+        "description": "Migrated to a full-stack setup with Docker, Nginx, and FastAPI"
+    },
+    {
+        "date": "2026-01-20",
+        "title": "Graph Platform v6.1 released",
+        "description": "Added TikZ export and improved theme switching"
+    },
+    {
+        "date": "2026-01-15",
+        "title": "Documentation center added",
+        "description": "Markdown/PDF online reading and downloads supported"
+    },
+    {
+        "date": "2025-12-01",
+        "title": "Graph Platform v6.0",
+        "description": "UI refactor and new force-directed layout engine"
+    }
+]

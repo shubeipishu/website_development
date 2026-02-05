@@ -18,52 +18,55 @@
 <body>
 
     <div id="sidebar">
-        <div class="tool-icon" data-tooltip="交互提示：双击空白处创建节点 / 按住 Shift 拖拽连线">
+        <div class="tool-icon" data-tooltip="交互提示：双击空白处创建节点 / 按住 Shift 拖拽连线" data-i18n-attr="data-tooltip:tooltip.interaction">
             <i class="fas fa-mouse-pointer" style="color:var(--primary);"></i>
         </div>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.showGenerator()" data-tooltip="图生成器 - 快速创建经典图结构"><i
+        <button class="tool-btn" onclick="app.showGenerator()" data-tooltip="图生成器 - 快速创建经典图结构" data-i18n-attr="data-tooltip:tooltip.generator"><i
                 class="fas fa-wand-magic-sparkles" style="color:#d946ef;"></i></button>
-        <button class="tool-btn" id="btn-physics" onclick="app.togglePhysics()" data-tooltip="物理布局：开/关 - 自动优化节点位置"><i
+        <button class="tool-btn" id="btn-physics" onclick="app.togglePhysics()" data-tooltip="物理布局：开/关 - 自动优化节点位置" data-i18n-attr="data-tooltip:tooltip.physics.on"><i
                 class="fas fa-atom"></i></button>
-        <button class="tool-btn toggle-on" id="btn-snap" onclick="app.toggleSnap()" data-tooltip="智能吸附：开 - 自动对齐节点"><i
+        <button class="tool-btn toggle-on" id="btn-snap" onclick="app.toggleSnap()" data-tooltip="智能吸附：开 - 自动对齐节点" data-i18n-attr="data-tooltip:tooltip.snap.on"><i
                 class="fas fa-magnet"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.deleteSelectionAction()" data-tooltip="删除选中对象 (Del)"><i
+        <button class="tool-btn" onclick="app.deleteSelectionAction()" data-tooltip="删除选中对象 (Del)" data-i18n-attr="data-tooltip:tooltip.delete"><i
                 class="fas fa-trash-alt"></i></button>
-        <button class="tool-btn" onclick="app.clear()" data-tooltip="清空画布 - 删除所有节点和边"><i class="fas fa-bomb"
+        <button class="tool-btn" onclick="app.clear()" data-tooltip="清空画布 - 删除所有节点和边" data-i18n-attr="data-tooltip:tooltip.clear"><i class="fas fa-bomb"
                 style="color:#ef4444"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.saveGraph()" data-tooltip="保存图为 JSON 文件 (Ctrl+S)"><i
+        <button class="tool-btn" onclick="app.saveGraph()" data-tooltip="保存图为 JSON 文件 (Ctrl+S)" data-i18n-attr="data-tooltip:tooltip.save"><i
                 class="fas fa-save"></i></button>
         <button class="tool-btn" onclick="document.getElementById('file-input').click()"
-            data-tooltip="打开 JSON 文件 (Ctrl+O)"><i class="fas fa-folder-open"></i></button>
+            data-tooltip="打开 JSON 文件 (Ctrl+O)" data-i18n-attr="data-tooltip:tooltip.open"><i class="fas fa-folder-open"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.showExportModal()" data-tooltip="导出 (PNG / TikZ)"><i
+        <button class="tool-btn" onclick="app.showExportModal()" data-tooltip="导出 (PNG / TikZ)" data-i18n-attr="data-tooltip:tooltip.export"><i
                 class="fas fa-file-export"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.undo()" data-tooltip="撤销上一步操作 (Ctrl+Z)"><i
+        <button class="tool-btn" onclick="app.undo()" data-tooltip="撤销上一步操作 (Ctrl+Z)" data-i18n-attr="data-tooltip:tooltip.undo"><i
                 class="fas fa-undo"></i></button>
-        <button class="tool-btn" onclick="app.redo()" data-tooltip="重做下一步操作 (Ctrl+Y)"><i
+        <button class="tool-btn" onclick="app.redo()" data-tooltip="重做下一步操作 (Ctrl+Y)" data-i18n-attr="data-tooltip:tooltip.redo"><i
                 class="fas fa-redo"></i></button>
-        <button class="tool-btn" onclick="app.resetView()" data-tooltip="重置视图到原点 (按 0 键)"><i
+        <button class="tool-btn" onclick="app.resetView()" data-tooltip="重置视图到原点 (按 0 键)" data-i18n-attr="data-tooltip:tooltip.reset"><i
                 class="fas fa-compress-arrows-alt"></i></button>
 
         <div style="flex: 1;"></div>
         <div class="separator"></div>
 
-        <button class="tool-btn" id="btn-theme" onclick="app.toggleTheme()" data-tooltip="切换为深色主题">
+        <button class="tool-btn" id="btn-theme" onclick="app.toggleTheme()" data-tooltip="切换为深色主题" data-i18n-attr="data-tooltip:tooltip.theme.dark">
             <i class="fas fa-moon"></i>
+        </button>
+        <button class="tool-btn" id="btn-lang" data-tooltip="切换语言">
+            EN
         </button>
     </div>
 
@@ -72,7 +75,7 @@
         <div id="zoom-indicator">100%</div>
         <div id="vis-banner">
             <div id="vis-content">
-                <div id="vis-label">Displaying</div>
+                <div id="vis-label" data-i18n="vis.displaying">Displaying</div>
                 <div id="vis-value">-</div>
             </div>
             <button class="close-vis" onclick="app.exitVis()"><i class="fas fa-times"></i></button>
@@ -86,110 +89,110 @@
             <div class="gen-main">
                 <div class="gen-header">
                     <div class="gen-title-row">
-                        <span class="gen-name" id="gen-display-name">Graph Name</span>
+                        <span class="gen-name" id="gen-display-name" data-i18n="gen.name.placeholder">Graph Name</span>
                         <span class="gen-tex-badge" id="gen-display-tex">tex</span>
                     </div>
-                    <div class="gen-desc" id="gen-display-desc">Description text goes here.</div>
+                    <div class="gen-desc" id="gen-display-desc" data-i18n="gen.desc.placeholder">Description text goes here.</div>
                 </div>
                 <div class="gen-body" id="gen-input-container"></div>
                 <div class="gen-footer">
                     <div style="margin-right: auto; display: flex; align-items: center; gap: 8px;">
                         <input type="checkbox" id="gen-append" checked style="width:16px; height:16px; cursor:pointer;">
                         <label for="gen-append"
-                            style="font-size:13px; color:#4b5563; font-weight:500; cursor:pointer; user-select:none;">保留画布现有图</label>
+                            style="font-size:13px; color:#4b5563; font-weight:500; cursor:pointer; user-select:none;" data-i18n="gen.keep">保留画布现有图</label>
                     </div>
-                    <button class="btn-secondary" onclick="app.hideGenerator()">取消</button>
-                    <button class="btn-primary" onclick="app.generateGraph()">生成</button>
+                    <button class="btn-secondary" onclick="app.hideGenerator()" data-i18n="gen.cancel">取消</button>
+                    <button class="btn-primary" onclick="app.generateGraph()" data-i18n="gen.generate">生成</button>
                 </div>
             </div>
         </div>
 
         <div id="export-modal" class="modal" style="display:none;">
             <div class="gen-sidebar">
-                <div class="gen-category-title">导出类型</div>
-                <div class="gen-item selected" onclick="app.switchExportTab('png')" id="tab-png"><span>PNG 图片</span>
+                <div class="gen-category-title" data-i18n="export.type">导出类型</div>
+                <div class="gen-item selected" onclick="app.switchExportTab('png')" id="tab-png"><span data-i18n="export.png">PNG 图片</span>
                 </div>
-                <div class="gen-item" onclick="app.switchExportTab('tikz')" id="tab-tikz"><span>LaTeX / TikZ</span>
+                <div class="gen-item" onclick="app.switchExportTab('tikz')" id="tab-tikz"><span data-i18n="export.tikz">LaTeX / TikZ</span>
                 </div>
             </div>
             <div class="gen-main">
                 <div class="gen-header">
-                    <div class="gen-title-row"><span class="gen-name" id="export-title">导出 PNG 图片</span></div>
-                    <div class="gen-desc" id="export-desc">导出当前画布为高清图片。</div>
+                    <div class="gen-title-row"><span class="gen-name" id="export-title" data-i18n="export.title.png">导出 PNG 图片</span></div>
+                    <div class="gen-desc" id="export-desc" data-i18n="export.desc.png">导出当前画布为高清图片。</div>
                 </div>
                 <div class="gen-body" id="export-body-png">
                     <div class="gen-input-group">
-                        <label class="gen-input-label">分辨率 (Scale)</label>
+                        <label class="gen-input-label" data-i18n="export.scale">分辨率 (Scale)</label>
                         <select id="exp-png-scale" class="gen-input">
-                            <option value="1">1x (屏幕分辨率)</option>
-                            <option value="2" selected>2x (高清 Retina)</option>
-                            <option value="4">4x (超清印刷)</option>
+                            <option value="1" data-i18n="export.scale.1x">1x (屏幕分辨率)</option>
+                            <option value="2" selected data-i18n="export.scale.2x">2x (高清 Retina)</option>
+                            <option value="4" data-i18n="export.scale.4x">4x (超清印刷)</option>
                         </select>
                     </div>
                     <div class="gen-input-group">
-                        <label class="gen-input-label">背景颜色</label>
+                        <label class="gen-input-label" data-i18n="export.bg">背景颜色</label>
                         <select id="exp-png-bg" class="gen-input">
-                            <option value="theme" selected>跟随当前主题</option>
-                            <option value="transparent">透明 (Transparent)</option>
-                            <option value="white">纯白 (White)</option>
-                            <option value="dark">深色 (Dark)</option>
+                            <option value="theme" selected data-i18n="export.bg.theme">跟随当前主题</option>
+                            <option value="transparent" data-i18n="export.bg.transparent">透明 (Transparent)</option>
+                            <option value="white" data-i18n="export.bg.white">纯白 (White)</option>
+                            <option value="dark" data-i18n="export.bg.dark">深色 (Dark)</option>
                         </select>
                     </div>
                 </div>
                 <div class="gen-body" id="export-body-tikz" style="display:none;">
                     <div class="gen-input-group">
-                        <label class="gen-input-label">缩放比例 (Scale)</label>
+                        <label class="gen-input-label" data-i18n="export.tikz.scale">缩放比例 (Scale)</label>
                         <input type="number" id="exp-tikz-scale" class="gen-input" value="1.0" step="0.1">
                     </div>
                     <div class="gen-input-group">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <input type="checkbox" id="exp-tikz-preamble" checked>
-                            <label for="exp-tikz-preamble" class="gen-input-label" style="margin:0;">包含完整文档
+                            <label for="exp-tikz-preamble" class="gen-input-label" style="margin:0;" data-i18n="export.tikz.preamble">包含完整文档
                                 (Preamble)</label>
                         </div>
-                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;">勾选后将包含 \documentclass 和
+                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;" data-i18n="export.tikz.preamble.desc">勾选后将包含 \documentclass 和
                             \begin{document}，可直接编译。</div>
                     </div>
                     <div class="gen-input-group">
                         <div
                             style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <label class="gen-input-label" style="margin-bottom:0;">节点样式 (Vertex Style)</label>
+                            <label class="gen-input-label" style="margin-bottom:0;" data-i18n="export.tikz.vertexStyle">节点样式 (Vertex Style)</label>
                             <select class="gen-input" style="width:auto; padding:4px 8px; height:28px; font-size:12px;"
                                 onchange="app.applyTikZPreset('vertex', this.value)">
-                                <option value="">选择预设...</option>
-                                <option value="circle, draw, fill=blue!20, minimum size=8mm, inner sep=1pt">默认 (蓝色圆)
+                                <option value="" data-i18n="export.tikz.vertexPreset.placeholder">选择预设...</option>
+                                <option value="circle, draw, fill=blue!20, minimum size=8mm, inner sep=1pt" data-i18n="export.tikz.vertexPreset.default">默认 (蓝色圆)
                                 </option>
-                                <option value="circle, draw, fill=white, minimum size=6mm">简单 (白圆)</option>
-                                <option value="circle, fill=black, minimum size=4pt, inner sep=0pt">实心点 (黑点)</option>
-                                <option value="rectangle, draw, fill=red!20, minimum size=6mm">方形 (红色)</option>
+                                <option value="circle, draw, fill=white, minimum size=6mm" data-i18n="export.tikz.vertexPreset.simple">简单 (白圆)</option>
+                                <option value="circle, fill=black, minimum size=4pt, inner sep=0pt" data-i18n="export.tikz.vertexPreset.dot">实心点 (黑点)</option>
+                                <option value="rectangle, draw, fill=red!20, minimum size=6mm" data-i18n="export.tikz.vertexPreset.rect">方形 (红色)</option>
                             </select>
                         </div>
                         <input type="text" id="exp-tikz-vertex-style" class="gen-input"
                             value="circle, draw, fill=blue!20, minimum size=8mm, inner sep=1pt">
-                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;">TikZ样式选项，如：circle, draw,
+                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;" data-i18n="export.tikz.vertexHelp">TikZ样式选项，如：circle, draw,
                             fill=blue!20</div>
                     </div>
                     <div class="gen-input-group">
                         <div
                             style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <label class="gen-input-label" style="margin-bottom:0;">边样式 (Edge Style)</label>
+                            <label class="gen-input-label" style="margin-bottom:0;" data-i18n="export.tikz.edgeStyle">边样式 (Edge Style)</label>
                             <select class="gen-input" style="width:auto; padding:4px 8px; height:28px; font-size:12px;"
                                 onchange="app.applyTikZPreset('edge', this.value)">
-                                <option value="">选择预设...</option>
-                                <option value="draw, thick">默认 (粗线)</option>
-                                <option value="draw, thin">细线</option>
-                                <option value="draw, thick, ->">有向 (箭头)</option>
-                                <option value="draw, dashed">虚线</option>
-                                <option value="draw, red, thick">红色</option>
+                                <option value="" data-i18n="export.tikz.edgePreset.placeholder">选择预设...</option>
+                                <option value="draw, thick" data-i18n="export.tikz.edgePreset.default">默认 (粗线)</option>
+                                <option value="draw, thin" data-i18n="export.tikz.edgePreset.thin">细线</option>
+                                <option value="draw, thick, ->" data-i18n="export.tikz.edgePreset.arrow">有向 (箭头)</option>
+                                <option value="draw, dashed" data-i18n="export.tikz.edgePreset.dashed">虚线</option>
+                                <option value="draw, red, thick" data-i18n="export.tikz.edgePreset.red">红色</option>
                             </select>
                         </div>
                         <input type="text" id="exp-tikz-edge-style" class="gen-input" value="draw, thick">
-                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;">TikZ样式选项，如：draw, thick, -></div>
+                        <div style="font-size:12px; color:#9ca3af; margin-top:4px;" data-i18n="export.tikz.edgeHelp">TikZ样式选项，如：draw, thick, -></div>
                     </div>
                 </div>
                 <div class="gen-footer">
-                    <button class="btn-secondary" onclick="app.hideExportModal()">取消</button>
-                    <button class="btn-primary" onclick="app.doExport()">导出 / 复制</button>
+                    <button class="btn-secondary" onclick="app.hideExportModal()" data-i18n="export.cancel">取消</button>
+                    <button class="btn-primary" onclick="app.doExport()" data-i18n="export.confirm">导出 / 复制</button>
                 </div>
             </div>
         </div>
@@ -201,15 +204,15 @@
         <div id="panel-toggle" onclick="app.togglePanel()"><i class="fas fa-chevron-right" id="toggle-icon"></i></div>
         <div id="panel-content">
             <div class="scroll-area">
-                <div class="card">
+                    <div class="card">
                     <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                        <h3><i class="fas fa-chart-pie" style="color:#8b5cf6"></i> 图的参数</h3><i
+                        <h3><i class="fas fa-chart-pie" style="color:#8b5cf6"></i> <span data-i18n="panel.metrics">图的参数</span></h3><i
                             class="fas fa-chevron-down arrow"></i>
                     </div>
                     <div class="card-body">
                         <div class="sub-group">
                             <div class="sub-header" onclick="this.parentElement.classList.toggle('closed')">
-                                <span>基础信息</span> <i class="fas fa-chevron-down"></i>
+                                <span data-i18n="panel.basic">基础信息</span> <i class="fas fa-chevron-down"></i>
                             </div>
                             <div class="sub-content">
                                 <div class="stat-row"><span id="lbl-v">|V|</span> <span class="stat-val"
@@ -220,7 +223,7 @@
                         </div>
                         <div class="sub-group">
                             <div class="sub-header" onclick="this.parentElement.classList.toggle('closed')">
-                                <span>度数统计</span> <i class="fas fa-chevron-down"></i>
+                                <span data-i18n="panel.degree">度数统计</span> <i class="fas fa-chevron-down"></i>
                             </div>
                             <div class="sub-content">
                                 <div class="stat-row"><span id="lbl-max-deg">Δ</span> <span class="stat-val"
@@ -233,7 +236,7 @@
                         </div>
                         <div class="sub-group">
                             <div class="sub-header" onclick="this.parentElement.classList.toggle('closed')">
-                                <span>结构特征</span> <i class="fas fa-chevron-down"></i>
+                                <span data-i18n="panel.struct">结构特征</span> <i class="fas fa-chevron-down"></i>
                             </div>
                             <div class="sub-content">
                                 <div class="stat-row"><span class="link-btn" id="btn-vis-diameter"
@@ -273,7 +276,7 @@
                             </div>
                         </div>
                         <div class="sub-group closed">
-                            <div class="sub-header" onclick="this.parentElement.classList.toggle('closed')"><span>连通性
+                            <div class="sub-header" onclick="this.parentElement.classList.toggle('closed')"><span data-i18n="panel.connectivity">连通性
                                     (Slow > 50)</span> <i class="fas fa-chevron-down"></i></div>
                             <div class="sub-content">
                                 <div class="stat-row"><span class="link-btn" id="btn-vis-kappa"
@@ -290,7 +293,7 @@
                 </div>
                 <div class="card collapsed">
                     <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                        <h3><i class="fas fa-border-all" style="color:#3b82f6"></i> 邻接矩阵 <span id="lbl-mat-a">A</span>
+                        <h3><i class="fas fa-border-all" style="color:#3b82f6"></i> <span data-i18n="panel.adj">邻接矩阵</span> <span id="lbl-mat-a">A</span>
                         </h3><i class="fas fa-chevron-down arrow"></i>
                     </div>
                     <div class="card-body">
@@ -302,7 +305,7 @@
                 </div>
                 <div class="card collapsed">
                     <div class="card-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                        <h3><i class="fas fa-project-diagram" style="color:#10b981"></i> 拉普拉斯矩阵 <span
+                        <h3><i class="fas fa-project-diagram" style="color:#10b981"></i> <span data-i18n="panel.lap">拉普拉斯矩阵</span> <span
                                 id="lbl-mat-l">L</span></h3><i class="fas fa-chevron-down arrow"></i>
                     </div>
                     <div class="card-body">
@@ -318,6 +321,7 @@
 
     <script src="js/config.js"></script>
     <script src="js/graph-algorithms.js"></script>
+    <script src="js/i18n.js"></script>
     <script type="module" src="js/app.js"></script>
 
 </body>

@@ -1,5 +1,15 @@
 [
     {
+        "date": "2026-02-05",
+        "title": "文档中心支持中英双语",
+        "description": "新增 docs-en 双目录与语言切换，英文缺失自动回退中文"
+    },
+    {
+        "date": "2026-02-04",
+        "title": "主页重构为 Vite + TypeScript",
+        "description": "多页面构建与模块化改造，提升维护性"
+    },
+    {
         "date": "2026-01-28",
         "title": "网站架构升级",
         "description": "迁移至 Docker + Nginx + FastAPI 全栈架构"
