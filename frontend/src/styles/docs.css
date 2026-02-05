@@ -1,0 +1,458 @@
+/**
+ * 文档中心 - 专用样式
+ * 左侧导航 + 右侧内容的双栏布局
+ */
+
+/* ============================================================
+   文档页面布局
+   ============================================================ */
+.docs-layout {
+    display: flex;
+    min-height: calc(100vh - var(--nav-height));
+}
+
+/* ============================================================
+   左侧导航栏
+   ============================================================ */
+.docs-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: var(--nav-height);
+    height: calc(100vh - var(--nav-height));
+    overflow-y: auto;
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+}
+
+.sidebar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-search {
+    margin-top: 1rem;
+}
+
+.sidebar-search input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.sidebar-search input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 导航分组 */
+.nav-section {
+    margin-bottom: 1.5rem;
+}
+
+.nav-section-title {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.nav-list {
+    list-style: none;
+}
+
+.nav-item {
+    margin: 2px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+    border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+    background: var(--primary-light);
+    border-left-color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-link-icon {
+    font-size: 1rem;
+}
+
+/* 下载分区 */
+.downloads-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.download-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.download-link:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+/* ============================================================
+   右侧内容区域
+   ============================================================ */
+.docs-content {
+    flex: 1;
+    padding: 2rem 3rem;
+    max-width: calc(100% - 280px);
+    overflow-x: hidden;
+}
+
+.docs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.docs-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.docs-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.docs-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.docs-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* ============================================================
+   Markdown 渲染内容样式
+   ============================================================ */
+.markdown-body {
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+.markdown-body h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-body h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1.75rem 0 1rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.markdown-body h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.markdown-body h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.25rem 0 0.5rem;
+}
+
+.markdown-body p {
+    margin: 1rem 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.markdown-body li {
+    margin: 0.5rem 0;
+}
+
+.markdown-body a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.markdown-body a:hover {
+    color: var(--primary-hover);
+}
+
+/* 代码块 */
+.markdown-body code {
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+    font-size: 0.875em;
+}
+
+.markdown-body pre {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.markdown-body pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* 引用块 */
+.markdown-body blockquote {
+    margin: 1.25rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid var(--primary-color);
+    background: var(--primary-light);
+    border-radius: 0 8px 8px 0;
+}
+
+.markdown-body blockquote p {
+    margin: 0;
+}
+
+/* 表格 */
+.markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+}
+
+.markdown-body th,
+.markdown-body td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.markdown-body th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+}
+
+.markdown-body tr:hover {
+    background: var(--bg-secondary);
+}
+
+/* 图片 */
+.markdown-body img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1rem 0;
+    box-shadow: var(--shadow-md);
+}
+
+/* 分割线 */
+.markdown-body hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0;
+}
+
+/* ============================================================
+   Admonition 提示块
+   ============================================================ */
+.markdown-body blockquote.admonition {
+    border: 1px solid var(--border-color);
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin: 1.25rem 0;
+    background: var(--bg-secondary);
+}
+
+.markdown-body blockquote.admonition .admonition-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-body blockquote.admonition .admonition-content > :first-child {
+    margin-top: 0;
+}
+
+.markdown-body blockquote.admonition .admonition-content > :last-child {
+    margin-bottom: 0;
+}
+
+.markdown-body blockquote.admonition.admonition-note {
+    border-left-color: var(--primary-color);
+}
+
+.markdown-body blockquote.admonition.admonition-tip {
+    border-left-color: var(--success-color);
+}
+
+.markdown-body blockquote.admonition.admonition-warning {
+    border-left-color: var(--warning-color);
+}
+
+.markdown-body blockquote.admonition.admonition-important {
+    border-left-color: var(--error-color);
+}
+
+.markdown-body blockquote.admonition.admonition-caution {
+    border-left-color: var(--warning-color);
+}
+
+/* ============================================================
+   加载状态
+   ============================================================ */
+.docs-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================================
+   404 / 空状态
+   ============================================================ */
+.docs-empty {
+    text-align: center;
+    padding: 4rem;
+}
+
+.docs-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.docs-empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.docs-empty-desc {
+    color: var(--text-secondary);
+}
+
+/* ============================================================
+   响应式设计
+   ============================================================ */
+@media (max-width: 1024px) {
+    .docs-content {
+        padding: 1.5rem 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .docs-layout {
+        flex-direction: column;
+    }
+
+    .docs-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .docs-content {
+        max-width: 100%;
+        padding: 1.5rem;
+    }
+
+    .docs-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .docs-actions {
+        width: 100%;
+    }
+
+    .docs-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
