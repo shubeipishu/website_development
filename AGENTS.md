@@ -6,7 +6,7 @@
   - `public/index.html`, `public/docs.html` (built by Vite)
   - `public/assets/` (hashed build artifacts)
   - `public/docs/` (Chinese docs) and `public/docs-en/` (English docs)
-  - `public/apps/graph-platform/` (standalone app, not built by Vite)
+  - `public/apps/graph-platform/` (built by Vite from `frontend/apps/graph-platform/` + `frontend/src/apps/graph-platform/`)
 - `backend/`: FastAPI service (`backend/src/main.py`) and persisted data in `backend/data/` (ignored by Git).
 - `nginx/`: Nginx config for serving `public/`.
 
