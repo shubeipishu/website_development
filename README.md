@@ -1,14 +1,14 @@
 # Website Development
 
-Personal website workspace with:
+Personal website repository with:
 - Frontend: Vite + TypeScript multi-page app
 - Backend: FastAPI service
-- Web server: Nginx (via Docker Compose)
+- Web server: Nginx (Docker Compose)
 
 ## Project Structure
 
 ```text
-frontend/                      Source code (Vite + TS)
+frontend/                      Vite source
   index.html
   docs.html
   apps/
@@ -23,24 +23,18 @@ frontend/                      Source code (Vite + TS)
     shared/
     styles/
 
-public/                        Build output served by Nginx
-  index.html
-  docs.html
-  assets/
-  apps/
-    graph-platform/
-    demo/
-
-backend/                       FastAPI
+backend/                       FastAPI service
   src/main.py
   data/                        Runtime data (gitignored)
 
+public/                        Generated static output (not tracked)
 nginx/
   default.conf
 
 docker-compose.yml
-deploy_vps.sh                  Linux VPS one-click deploy script
-deploy_local.ps1               Windows local one-click deploy script
+deploy_vps.sh                  Linux VPS deploy script
+deploy_local.ps1               Windows local deploy script
+package_for_vps.ps1            Windows packaging script (zip for manual upload)
 ```
 
 ## Requirements
@@ -49,7 +43,7 @@ deploy_local.ps1               Windows local one-click deploy script
 - Docker + Docker Compose
 - Git
 
-## Frontend Build (Manual)
+## Build Frontend Manually
 
 ```bash
 cd frontend
@@ -57,66 +51,77 @@ npm ci --include=dev
 npm run build
 ```
 
-This writes static output into `public/`.
-Generated frontend build outputs are not tracked by Git (`public/assets`, `public/index.html`, `public/docs.html`, and built app entry HTML files).
+Build output goes to `public/`.
 
-## Run Full Stack (Manual)
+## Run Full Stack Manually
 
 ```bash
 docker compose up -d --build
 ```
 
 Health endpoint:
-- `http://127.0.0.1/api/health`
+- `http://127.0.0.1:<WEB_PORT>/api/health`
 
-## One-Click Deploy Scripts
+## One-Click Deploy
 
-### 1) Linux VPS
-
-Script: `deploy_vps.sh`
+### Linux VPS
 
 ```bash
 cd website_development
-chmod +x deploy_vps.sh
-./deploy_vps.sh
+bash deploy_vps.sh
 ```
 
-What it does:
-1. Verifies Git working tree is clean
-2. Pulls latest code (`git pull --ff-only origin main`)
-3. Installs frontend deps (`npm ci --include=dev`)
-4. Builds frontend (`npm run build`)
-5. Runs Docker Compose (`up -d --build`)
-6. Prints service status and health check
+Optional English output:
 
-### 2) Windows 11 Local
+```bash
+DEPLOY_LANG=en bash deploy_vps.sh
+```
 
-Script: `deploy_local.ps1`
+Script flow:
+1. Check Git working tree is clean
+2. Pull latest code (`git pull --ff-only origin main`)
+3. Install frontend dependencies
+4. Build frontend
+5. Rebuild and start Docker services
+6. Read `WEB_PORT` from `.env` and run health check on that port
+7. Print service status and health check result
+
+### Windows Local
 
 ```powershell
 cd website_development
 .\deploy_local.ps1
 ```
 
-Optional custom branch/remote:
+Optional:
 
 ```powershell
 .\deploy_local.ps1 -Remote origin -Branch main
 ```
 
+## What Is `package_for_vps.ps1`?
+
+`package_for_vps.ps1` is a Windows helper script for packaging the project into a zip file (`deploy_package.zip`) for manual VPS upload.
+
+Use it when:
+- You do not use `git pull` on the server
+- You want to upload a deployment package via panel/file manager
+
 What it does:
-1. Verifies Git working tree is clean
-2. Pulls latest code
-3. Installs frontend deps
-4. Builds frontend
-5. Runs Docker Compose up/build
-6. Checks `http://127.0.0.1/api/health`
+1. Creates a temporary folder
+2. Copies project files while excluding `.git`, `.venv`, `node_modules`, logs, and cache files
+3. Generates `deploy_package.zip`
+4. Cleans temporary files
 
-## Common Troubleshooting
+Run it on Windows PowerShell:
 
-### Build error: cannot resolve `@fortawesome/fontawesome-free`
+```powershell
+.\package_for_vps.ps1
+```
 
-Run:
+## Troubleshooting
+
+### Cannot resolve `@fortawesome/fontawesome-free`
 
 ```bash
 cd frontend
@@ -125,18 +130,28 @@ npm ci --include=dev
 npm run build
 ```
 
-Check file exists:
+Optional check:
 
 ```bash
 ls node_modules/@fortawesome/fontawesome-free/css/all.min.css
 ```
 
-### Docker command not found
+### Deploy script says working tree is not clean
 
-Install Docker Desktop (Windows) or Docker Engine + Compose plugin (Linux).
+Check changed files:
+
+```bash
+git status
+```
+
+Restore a single changed file:
+
+```bash
+git restore <file>
+```
 
 ## Notes
 
-- Frontend build artifacts are generated during deployment and are not committed.
-- Do not commit runtime data under `backend/data/`.
+- Frontend generated output is not tracked in Git.
+- Do not commit runtime data in `backend/data/`.
 - `.env` is not committed. Use `.env.example` as template.
