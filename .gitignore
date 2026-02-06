@@ -42,6 +42,11 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+public/assets/
+public/index.html
+public/docs.html
+public/apps/demo/index.html
+public/apps/graph-platform/index.html
 
 # 前端依赖
 frontend/node_modules/

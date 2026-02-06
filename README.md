@@ -58,6 +58,7 @@ npm run build
 ```
 
 This writes static output into `public/`.
+Generated frontend build outputs are not tracked by Git (`public/assets`, `public/index.html`, `public/docs.html`, and built app entry HTML files).
 
 ## Run Full Stack (Manual)
 
@@ -136,6 +137,6 @@ Install Docker Desktop (Windows) or Docker Engine + Compose plugin (Linux).
 
 ## Notes
 
-- Commit frontend source changes together with updated `public/` build artifacts.
+- Frontend build artifacts are generated during deployment and are not committed.
 - Do not commit runtime data under `backend/data/`.
 - `.env` is not committed. Use `.env.example` as template.
