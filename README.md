@@ -75,7 +75,7 @@ Health endpoint:
 Script: `deploy_vps.sh`
 
 ```bash
-cd /opt/website_development
+cd website_development
 chmod +x deploy_vps.sh
 ./deploy_vps.sh
 ```
@@ -93,7 +93,7 @@ What it does:
 Script: `deploy_local.ps1`
 
 ```powershell
-cd "E:\Programs\website development"
+cd website_development
 .\deploy_local.ps1
 ```
 
