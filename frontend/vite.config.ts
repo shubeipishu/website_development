@@ -19,6 +19,7 @@ export default defineConfig({
         home: resolve(root, 'index.html'),
         docs: resolve(root, 'docs.html'),
         demo: resolve(root, 'apps/demo/index.html'),
+        graphPlatform: resolve(root, 'apps/graph-platform/index.html'),
       },
       output: {
         assetFileNames: 'assets/[name]-[hash][extname]',

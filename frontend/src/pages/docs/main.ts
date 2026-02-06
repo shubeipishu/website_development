@@ -2,11 +2,8 @@ import '@/styles/main.css';
 import '@/styles/docs.css';
 import { initTheme } from '@/shared/theme';
 import { getLang, initI18n, onLangChange, t, type Lang } from '@/shared/i18n';
-
-// 引入 marked.js 和 highlight.js (CDN)
-let _markedLoaded = false;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let hljs: any = null;
+import hljsThemeLightUrl from 'highlight.js/styles/github.css?url';
+import hljsThemeDarkUrl from 'highlight.js/styles/github-dark.css?url';
 
 type I18nText = string | { zh?: string; en?: string };
 type DocsConfig = {
@@ -22,19 +19,100 @@ const DOCS_BASE: Record<Lang, string> = {
   en: '/docs-en',
 };
 
+type MarkedParser = typeof import('marked').marked;
+type HljsCore = typeof import('highlight.js/lib/core').default;
+type RenderMathInElement = typeof import('katex/contrib/auto-render').default;
+
+let markedParser: MarkedParser | null = null;
+let markedPromise: Promise<void> | null = null;
+
+let hljsCore: HljsCore | null = null;
+let renderMath: RenderMathInElement | null = null;
+let highlightPromise: Promise<void> | null = null;
+let mathPromise: Promise<void> | null = null;
+
+async function ensureMarked() {
+  if (markedParser) return;
+  if (!markedPromise) {
+    markedPromise = (async () => {
+      const { marked } = await import('marked');
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+      });
+      markedParser = marked;
+    })();
+  }
+  await markedPromise;
+}
+
+async function ensureHighlight() {
+  if (hljsCore) return;
+  if (!highlightPromise) {
+    highlightPromise = (async () => {
+      const [
+        { default: core },
+        { default: bashLang },
+        { default: cssLang },
+        { default: javascriptLang },
+        { default: jsonLang },
+        { default: markdownLang },
+        { default: pythonLang },
+        { default: typescriptLang },
+        { default: xmlLang },
+      ] = await Promise.all([
+        import('highlight.js/lib/core'),
+        import('highlight.js/lib/languages/bash'),
+        import('highlight.js/lib/languages/css'),
+        import('highlight.js/lib/languages/javascript'),
+        import('highlight.js/lib/languages/json'),
+        import('highlight.js/lib/languages/markdown'),
+        import('highlight.js/lib/languages/python'),
+        import('highlight.js/lib/languages/typescript'),
+        import('highlight.js/lib/languages/xml'),
+      ]);
+
+      core.registerLanguage('bash', bashLang);
+      core.registerLanguage('css', cssLang);
+      core.registerLanguage('javascript', javascriptLang);
+      core.registerLanguage('js', javascriptLang);
+      core.registerLanguage('json', jsonLang);
+      core.registerLanguage('markdown', markdownLang);
+      core.registerLanguage('md', markdownLang);
+      core.registerLanguage('python', pythonLang);
+      core.registerLanguage('py', pythonLang);
+      core.registerLanguage('typescript', typescriptLang);
+      core.registerLanguage('ts', typescriptLang);
+      core.registerLanguage('html', xmlLang);
+      core.registerLanguage('xml', xmlLang);
+
+      hljsCore = core;
+    })();
+  }
+  await highlightPromise;
+}
+
+async function ensureMath() {
+  if (renderMath) return;
+  if (!mathPromise) {
+    mathPromise = (async () => {
+      const [{ default: renderMathInElement }] = await Promise.all([
+        import('katex/contrib/auto-render'),
+        import('katex/dist/katex.min.css'),
+      ]);
+      renderMath = renderMathInElement;
+    })();
+  }
+  await mathPromise;
+}
+
 let currentDocPath: string | null = null;
 
 const init = async () => {
-  try {
-    await loadDependencies();
-  } catch (error) {
-    console.warn('Failed to load external dependencies, continuing without them:', error);
-  }
   initI18n();
   await loadDocsConfig();
   initTheme({ onThemeChange: syncHighlightTheme });
   initSearch();
-  scheduleEnhancers();
   onLangChange(() => {
     if (docsConfig) {
       renderSidebar(docsConfig);
@@ -54,91 +132,12 @@ if (document.readyState === 'loading') {
 }
 
 /* ============================================================
-   加载外部依赖
-   ============================================================ */
-async function loadDependencies() {
-  // 加载 marked.js（核心渲染）
-  await loadScript('https://cdn.jsdelivr.net/npm/marked/marked.min.js');
-  _markedLoaded = true;
-
-  // 配置 marked（高亮在增强模块加载后再处理）
-  const win = window as Window & { marked?: any };
-  if (win.marked) {
-    win.marked.setOptions({
-      highlight: function (code: string, lang: string) {
-        if (hljs && lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(code, { language: lang }).value;
-        }
-        return code;
-      },
-      breaks: true,
-      gfm: true,
-    });
-  }
-}
-
-function scheduleEnhancers() {
-  const run = () => {
-    loadEnhancers().catch((err) => {
-      console.warn('Enhancers failed to load:', err);
-    });
-  };
-  const win = window as Window & { requestIdleCallback?: (cb: () => void, options?: { timeout: number }) => void };
-  if (win.requestIdleCallback) {
-    win.requestIdleCallback(run, { timeout: 2000 });
-  } else {
-    setTimeout(run, 800);
-  }
-}
-
-async function loadEnhancers() {
-  const win = window as Window & { hljs?: any; katex?: any; renderMathInElement?: any };
-
-  if (!hljs) {
-    await loadScript('https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js');
-    hljs = win.hljs;
-  }
-
-  if (!win.katex) {
-    await loadCSS('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');
-    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
-    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
-  }
-
-  enhanceCurrentContent();
-}
-
-function loadScript(src: string) {
-  return new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve();
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-function loadCSS(href: string) {
-  return new Promise<void>((resolve, reject) => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    link.onload = () => resolve();
-    link.onerror = reject;
-    document.head.appendChild(link);
-  });
-}
-
-/* ============================================================
    同步代码高亮主题
    ============================================================ */
 function syncHighlightTheme(theme: string) {
   const hljsLink = document.getElementById('hljs-theme') as HTMLLinkElement | null;
   if (!hljsLink) return;
-
-  const base = 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/';
-  const file = theme === 'dark' ? 'github-dark.min.css' : 'github.min.css';
-  hljsLink.href = base + file;
+  hljsLink.href = theme === 'dark' ? hljsThemeDarkUrl : hljsThemeLightUrl;
 }
 
 /* ============================================================
@@ -295,7 +294,7 @@ async function loadDocument(filePath: string, opts: { force?: boolean } = {}) {
   const cacheKey = `${lang}:${filePath}`;
 
   if (!opts.force && docsCache.has(cacheKey)) {
-    renderDocumentFromCache(filePath, docsCache.get(cacheKey) || '');
+    await renderDocumentFromCache(filePath, docsCache.get(cacheKey) || '');
     return;
   }
 
@@ -318,30 +317,27 @@ async function loadDocument(filePath: string, opts: { force?: boolean } = {}) {
     const markdown = await response.text();
     docsCache.set(cacheKey, markdown);
 
-    renderDocumentFromCache(filePath, markdown);
+    await renderDocumentFromCache(filePath, markdown);
   } catch (error) {
     console.error('Failed to load document:', error);
     showEmptyState(t('docs.error.notfound.title'), t('docs.error.notfound.desc', { file: filePath }));
   }
 }
 
-function renderDocumentFromCache(filePath: string, markdown: string) {
+async function renderDocumentFromCache(filePath: string, markdown: string) {
   const content = document.getElementById('docs-content');
   const titleEl = document.getElementById('docs-title');
   if (!content) return;
 
   // 渲染 Markdown
-  const win = window as Window & { marked?: any };
-  if (win.marked) {
-    content.innerHTML = `<div class="markdown-body">${win.marked.parse(markdown)}</div>`;
-  } else {
-    content.innerHTML = `<pre>${markdown}</pre>`;
-  }
+  await ensureMarked();
+  if (!markedParser) return;
+  content.innerHTML = `<div class="markdown-body">${markedParser.parse(markdown) as string}</div>`;
 
   // 处理 Admonition 语法: > [!NOTE] / [!TIP] / [!WARNING] 等
   transformAdmonitions(content);
 
-  enhanceCurrentContent();
+  await enhanceCurrentContent(markdown);
   ensurePlatformLinks(content);
 
   // 更新标题
@@ -360,15 +356,21 @@ function renderDocumentFromCache(filePath: string, markdown: string) {
   interceptMarkdownLinks(content, filePath);
 }
 
-function enhanceCurrentContent() {
+async function enhanceCurrentContent(markdown: string) {
   const content = document.getElementById('docs-content');
   if (!content) return;
 
-  const win = window as Window & { renderMathInElement?: any };
+  const hasCodeBlocks = content.querySelector('pre code') !== null;
+  const hasMathSyntax =
+    markdown.includes('$$') || markdown.includes('\\(') || markdown.includes('\\[') || /(^|[^\\])\$(?!\s)/m.test(markdown);
+
+  if (!hasCodeBlocks && !hasMathSyntax) return;
 
   // 渲染公式 (KaTeX)
-  if (win.renderMathInElement) {
-    win.renderMathInElement(content, {
+  if (hasMathSyntax) {
+    await ensureMath();
+    if (!renderMath) return;
+    renderMath(content, {
       delimiters: [
         { left: '$$', right: '$$', display: true },
         { left: '$', right: '$', display: false },
@@ -380,9 +382,11 @@ function enhanceCurrentContent() {
   }
 
   // 代码高亮
-  if (hljs) {
-    content.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightElement(block);
+  if (hasCodeBlocks) {
+    await ensureHighlight();
+    if (!hljsCore) return;
+    content.querySelectorAll<HTMLElement>('pre code').forEach((block) => {
+      hljsCore?.highlightElement(block);
     });
   }
 }

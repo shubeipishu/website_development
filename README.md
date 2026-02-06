@@ -7,7 +7,7 @@ Key ideas:
 - `frontend/` is the source (Vite + TypeScript, multi-page).
 - `public/` is the deployable static output served by Nginx.
 - `backend/` provides feedback and visit-count APIs.
-- `public/apps/graph-platform/` is a standalone app and is not built by Vite.
+- `graph-platform` is built by Vite from `frontend/apps/graph-platform/` + `frontend/src/apps/graph-platform/`.
 
 ## Architecture
 
@@ -15,6 +15,7 @@ Key ideas:
   - Home: `frontend/index.html` -> `public/index.html`
   - Docs: `frontend/docs.html` -> `public/docs.html`
   - Demo app: `frontend/apps/demo/index.html` -> `public/apps/demo/index.html`
+  - Graph platform: `frontend/apps/graph-platform/index.html` -> `public/apps/graph-platform/index.html`
 - Backend (FastAPI)
   - Feedback submission
   - Visit tracking and stats
@@ -35,12 +36,14 @@ frontend/                Vite + TS source
   docs.html
   apps/
     demo/
+    graph-platform/
   src/
     pages/
       home/
       docs/
     apps/
       demo/
+      graph-platform/
     shared/
     styles/
   vite.config.ts
@@ -49,7 +52,7 @@ public/                  Deployable static site (build output + assets)
   docs.html
   assets/
   apps/
-    graph-platform/      Standalone app (do not modify unless needed)
+    graph-platform/      Vite build output
     demo/
     matrix-platform/
     geo-platform/
@@ -90,6 +93,7 @@ npm run build
 ```
 
 This writes to `public/` and updates `public/index.html` and `public/docs.html`.
+It also updates `public/apps/graph-platform/index.html` and related assets.
 
 ## Backend development
 
@@ -124,9 +128,6 @@ If you add a new doc:
 3. Register it in `frontend/vite.config.ts` under `build.rollupOptions.input`
 4. Run `npm run build`
 5. The output will appear in `public/apps/<app>/`
-
-If the app is a standalone static project (like graph-platform), place it
-directly under `public/apps/<app>/` and do not add it to Vite.
 
 ## API endpoints (backend)
 

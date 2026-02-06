@@ -1,6 +1,7 @@
 @echo off
 setlocal EnableDelayedExpansion
-cd /d "%~dp0"
+cd /d "%~dp0..\..\"
+set "APP_URL=http://127.0.0.1:8080/apps/graph-platform/index.html"
 
 :: Set Title and Color
 title Graph Platform Server
@@ -36,9 +37,9 @@ echo  [+] Found local virtual environment (.venv).
 echo  [+] Starting http.server...
 echo  [+] Launching in 3 seconds...
 timeout /t 3 /nobreak >nul
-echo  [+] Opening browser at http://127.0.0.1:8080
+echo  [+] Opening browser at %APP_URL%
 echo.
-start http://127.0.0.1:8080
+start %APP_URL%
 "..\.venv\Scripts\python.exe" -m http.server 8080
 goto End
 
@@ -54,9 +55,9 @@ echo  [+] Node.js detected.
 echo  [+] Starting http-server...
 echo  [+] Launching in 3 seconds...
 timeout /t 3 /nobreak >nul
-echo  [+] Opening browser at http://127.0.0.1:8080
+echo  [+] Opening browser at %APP_URL%
 echo.
-start http://127.0.0.1:8080
+start %APP_URL%
 call npx http-server . -p 8080 -c-1 --cors
 goto End
 
@@ -72,9 +73,9 @@ echo  [+] Global Python detected.
 echo  [+] Starting http.server...
 echo  [+] Launching in 3 seconds...
 timeout /t 3 /nobreak >nul
-echo  [+] Opening browser at http://127.0.0.1:8080
+echo  [+] Opening browser at %APP_URL%
 echo.
-start http://127.0.0.1:8080
+start %APP_URL%
 python -m http.server 8080
 goto End
 
@@ -86,7 +87,7 @@ echo.
 
 echo  [!] Neither Node.js nor Python was found.
 echo  [+] Starting built-in Windows PowerShell server...
-echo  [+] Opening browser at http://127.0.0.1:8080
+echo  [+] Opening browser at %APP_URL%
 echo.
 
 echo  (Close this window to stop the server)
@@ -102,7 +103,7 @@ echo $listener = New-Object System.Net.HttpListener >> "%PS_SCRIPT%"
 echo $listener.Prefixes.Add("http://+:$port/") >> "%PS_SCRIPT%"
 echo $listener.Start() >> "%PS_SCRIPT%"
 echo Write-Host "Server listening on http://localhost:$port" >> "%PS_SCRIPT%"
-echo Start-Process "http://localhost:$port" >> "%PS_SCRIPT%"
+echo Start-Process "http://localhost:$port/apps/graph-platform/index.html" >> "%PS_SCRIPT%"
 echo while ($listener.IsListening) { >> "%PS_SCRIPT%"
 echo     $context = $listener.GetContext() >> "%PS_SCRIPT%"
 echo     $response = $context.Response >> "%PS_SCRIPT%"
