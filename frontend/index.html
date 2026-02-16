@@ -115,8 +115,19 @@
                 <h2 class="section-title" data-i18n="section.projects">我的项目</h2>
                 <div class="projects-grid">
                     <!-- 项目卡片 1: 图论平台 -->
-                    <div class="project-card">
-                        <div class="project-cover">GP</div>
+                    <article class="project-card project-card-link">
+                        <a href="apps/graph-platform/index.html" class="project-card-hitbox" target="_blank"
+                            aria-label="打开图论科研平台 Pro"></a>
+                        <div class="project-cover" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="6" cy="6" r="2.5" fill="currentColor" />
+                                <circle cx="18" cy="6" r="2.5" fill="currentColor" />
+                                <circle cx="6" cy="18" r="2.5" fill="currentColor" />
+                                <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+                                <path d="M8.5 6h7M6 8.5V15.5M18 8.5V15.5M8.5 18h7" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
                         <div class="project-content">
                             <h3 class="project-title">
                                 <svg class="project-logo" viewBox="0 0 100 100" fill="none"
@@ -141,15 +152,24 @@
                                 <span class="tag">Canvas</span>
                                 <span class="tag">Web Worker</span>
                             </div>
-                            <a href="apps/graph-platform/index.html" class="btn btn-primary" target="_blank" data-i18n="project.graph.cta">
-                                立即体验
-                            </a>
+                            <div class="project-actions">
+                                <a href="apps/graph-platform/index.html" class="btn btn-primary" target="_blank"
+                                    data-i18n="project.graph.cta" aria-label="立即体验图论科研平台">
+                                    立即体验
+                                </a>
+                                <span class="project-meta">v6.1</span>
+                            </div>
                         </div>
-                    </div>
+                    </article>
 
                     <!-- 项目卡片 2: 占位符 -->
-                    <div class="project-card">
-                        <div class="project-cover project-cover-alt">NP</div>
+                    <article class="project-card">
+                        <div class="project-cover project-cover-alt" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="34" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="5" width="16" height="14" rx="3" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            </svg>
+                        </div>
                         <div class="project-content">
                             <h3 class="project-title" data-i18n="project.placeholder.title">待开发项目</h3>
                             <p class="project-desc" data-i18n="project.placeholder.desc">
@@ -158,11 +178,14 @@
                             <div class="project-tags">
                                 <span class="tag" data-i18n="project.placeholder.tag">Coming Soon</span>
                             </div>
-                            <button class="btn btn-secondary" disabled style="cursor: not-allowed;" data-i18n="project.placeholder.cta">
-                                建设中
-                            </button>
+                            <div class="project-actions">
+                                <button class="btn btn-secondary btn-disabled" disabled data-i18n="project.placeholder.cta">
+                                    敬请期待
+                                </button>
+                                <span class="project-meta" data-i18n="project.placeholder.tag">Coming Soon</span>
+                            </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>

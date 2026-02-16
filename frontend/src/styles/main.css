@@ -428,14 +428,17 @@ main,
 }
 
 .project-card {
+    position: relative;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
     border: 1px solid var(--border-color);
-    transition: all var(--transition-normal);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    min-height: 100%;
 }
 
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-within {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-color);
@@ -446,30 +449,34 @@ main,
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.25rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
+    color: #eef2ff;
     background: linear-gradient(135deg, var(--primary-color), #a855f7);
 }
 
 .project-cover-alt {
     background: linear-gradient(135deg, #3b82f6, #10b981);
+    color: #ecfeff;
 }
 
 .project-content {
+    height: calc(100% - 180px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
     padding: 1.5rem;
 }
 
 .project-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    margin-bottom: 0;
 }
 
 .project-desc {
     color: var(--text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.94rem;
+    margin-bottom: 0;
     line-height: 1.6;
 }
 
@@ -477,15 +484,59 @@ main,
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 }
 
 .tag {
-    padding: 0.25rem 0.75rem;
+    padding: 0.3rem 0.75rem;
     background: var(--bg-secondary);
     border-radius: 20px;
     font-size: 0.8rem;
     color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.project-actions {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.project-meta {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.btn-disabled {
+    cursor: not-allowed;
+}
+
+.project-card-link {
+    cursor: pointer;
+}
+
+.project-card-hitbox {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.project-content .btn,
+.project-content .project-title a,
+.project-content .project-tags {
+    position: relative;
+    z-index: 2;
+}
+
+.project-card-hitbox:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
 }
 
 /* ============================================================
@@ -722,6 +773,24 @@ select:focus-visible,
         grid-template-columns: 1fr;
     }
 
+    .project-content {
+        padding: 1.25rem;
+    }
+
+    .project-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .project-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-meta {
+        text-align: center;
+    }
+
     .changelog-item {
         flex-direction: column;
         gap: 0.75rem;
@@ -893,16 +962,18 @@ select:focus-visible,
    卡片3D悬浮效果
    ============================================================ */
 .project-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     transform-style: preserve-3d;
     will-change: transform;
 }
 
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-within {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-[data-theme="dark"] .project-card:hover {
+[data-theme="dark"] .project-card:hover,
+[data-theme="dark"] .project-card:focus-within {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -973,6 +1044,7 @@ select:focus-visible,
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
-[data-theme="dark"] .project-card:hover {
+[data-theme="dark"] .project-card:hover,
+[data-theme="dark"] .project-card:focus-within {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 }

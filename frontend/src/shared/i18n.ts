@@ -33,7 +33,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'project.placeholder.desc':
       '这是我的下一个创意位置。无论是博客系统还是个人工具，未来将在这里展示。',
     'project.placeholder.tag': '即将到来',
-    'project.placeholder.cta': '建设中',
+    'project.placeholder.cta': '敬请期待',
 
     'feedback.title': '反馈与建议',
     'feedback.email.label': '邮箱（可选）',
@@ -97,7 +97,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'project.placeholder.desc':
       'This spot is reserved for my next idea. Whether it is a blog system or a personal tool, it will appear here.',
     'project.placeholder.tag': 'Coming Soon',
-    'project.placeholder.cta': 'In Progress',
+    'project.placeholder.cta': 'Coming soon',
 
     'feedback.title': 'Feedback',
     'feedback.email.label': 'Email (optional)',
