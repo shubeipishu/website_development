@@ -2,6 +2,7 @@ import '@/styles/main.css';
 import '@/styles/docs.css';
 import { initTheme } from '@/shared/theme';
 import { getLang, initI18n, onLangChange, t, type Lang } from '@/shared/i18n';
+import { initMobileNav } from '@/shared/nav';
 import hljsThemeLightUrl from 'highlight.js/styles/github.css?url';
 import hljsThemeDarkUrl from 'highlight.js/styles/github-dark.css?url';
 
@@ -110,6 +111,7 @@ let currentDocPath: string | null = null;
 
 const init = async () => {
   initI18n();
+  initMobileNav();
   await loadDocsConfig();
   initTheme({ onThemeChange: syncHighlightTheme });
   initSearch();
@@ -211,7 +213,7 @@ function renderSidebar(config: DocsConfig) {
                             <a href="?doc=${encodeURIComponent(item.file)}" 
                                class="nav-link" 
                                data-file="${item.file}">
-                                <span class="nav-link-icon">📄</span>
+                                <span class="nav-link-icon" aria-hidden="true">#</span>
                                 <span>${pickText(item.title, lang)}</span>
                             </a>
                         </li>
@@ -503,7 +505,7 @@ function showEmptyState(title: string, desc: string) {
 
   content.innerHTML = `
         <div class="docs-empty">
-            <div class="docs-empty-icon">📭</div>
+            <div class="docs-empty-icon">-</div>
             <div class="docs-empty-title">${title}</div>
             <div class="docs-empty-desc">${desc}</div>
         </div>

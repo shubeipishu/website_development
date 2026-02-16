@@ -44,8 +44,14 @@
             </ul>
 
             <div class="nav-actions">
+                <button id="menu-toggle" class="menu-toggle" aria-label="切换导航菜单" aria-expanded="false"
+                    data-i18n="nav.menu" data-i18n-attr="aria-label:nav.menu.aria">菜单</button>
                 <button id="lang-toggle" class="lang-toggle" aria-label="切换语言" data-i18n-attr="aria-label:nav.lang.aria">EN</button>
-                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">🌙</button>
+                <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+                        <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -62,14 +68,14 @@
                 <div class="hero-content">
                     <!-- 可选：添加头像 -->
                     <!-- <img src="assets/avatar.jpg" alt="头像" class="hero-avatar"> -->
-                    <h1><span data-i18n="hero.greeting">你好，我是</span> <span id="typewriter-text">树皮斑马</span><span class="typewriter-cursor"></span> 👋</h1>
+                    <h1><span data-i18n="hero.greeting">你好，我是</span> <span id="typewriter-text">树皮斑马</span><span class="typewriter-cursor"></span></h1>
                     <p class="hero-subtitle" data-i18n="hero.subtitle">
                         欢迎来到我的个人主页。我是一名技术爱好者，热衷于探索 Web 开发和数学可视化。
                         这里展示了我的项目和技术文档。
                     </p>
                     <div class="hero-buttons">
-                        <a href="#projects" class="btn btn-primary" data-i18n="hero.cta.projects">🚀 浏览项目</a>
-                        <a href="docs.html" class="btn btn-secondary" data-i18n="hero.cta.docs">📚 查看文档</a>
+                        <a href="#projects" class="btn btn-primary" data-i18n="hero.cta.projects">浏览项目</a>
+                        <a href="docs.html" class="btn btn-secondary" data-i18n="hero.cta.docs">查看文档</a>
                     </div>
                 </div>
             </div>
@@ -80,7 +86,7 @@
              ============================================================ -->
         <section id="changelog" class="section">
             <div class="container">
-                <h2 class="section-title" data-i18n="section.changelog">📢 最近更新</h2>
+                <h2 class="section-title" data-i18n="section.changelog">最近更新</h2>
                 <div id="changelog-list" class="changelog-list">
                     <!-- 静态fallback，JS加载后会替换 -->
                     <div class="changelog-item">
@@ -106,13 +112,11 @@
              ============================================================ -->
         <section id="projects" class="section">
             <div class="container">
-                <h2 class="section-title" data-i18n="section.projects">🚀 我的项目</h2>
+                <h2 class="section-title" data-i18n="section.projects">我的项目</h2>
                 <div class="projects-grid">
                     <!-- 项目卡片 1: 图论平台 -->
                     <div class="project-card">
-                        <div class="project-cover">
-                            🕸️
-                        </div>
+                        <div class="project-cover">GP</div>
                         <div class="project-content">
                             <h3 class="project-title">
                                 <svg class="project-logo" viewBox="0 0 100 100" fill="none"
@@ -138,16 +142,14 @@
                                 <span class="tag">Web Worker</span>
                             </div>
                             <a href="apps/graph-platform/index.html" class="btn btn-primary" target="_blank" data-i18n="project.graph.cta">
-                                🚀 立即体验
+                                立即体验
                             </a>
                         </div>
                     </div>
 
                     <!-- 项目卡片 2: 占位符 -->
                     <div class="project-card">
-                        <div class="project-cover" style="background: linear-gradient(135deg, #3b82f6, #10b981);">
-                            📝
-                        </div>
+                        <div class="project-cover project-cover-alt">NP</div>
                         <div class="project-content">
                             <h3 class="project-title" data-i18n="project.placeholder.title">待开发项目</h3>
                             <p class="project-desc" data-i18n="project.placeholder.desc">
@@ -157,7 +159,7 @@
                                 <span class="tag" data-i18n="project.placeholder.tag">Coming Soon</span>
                             </div>
                             <button class="btn btn-secondary" disabled style="cursor: not-allowed;" data-i18n="project.placeholder.cta">
-                                🚧 建设中
+                                建设中
                             </button>
                         </div>
                     </div>
@@ -170,7 +172,7 @@
              ============================================================ -->
         <section id="faq" class="section">
             <div class="container">
-                <h2 class="section-title" data-i18n="section.faq">❓ 常见问题</h2>
+                <h2 class="section-title" data-i18n="section.faq">常见问题</h2>
                 <div id="faq-list" class="faq-list">
                     <!-- 静态fallback，JS加载后会替换 -->
                     <div class="faq-item">
@@ -217,7 +219,7 @@
              ============================================================ -->
         <section id="feedback" class="section feedback-section">
             <div class="container">
-                <h2 class="section-title" data-i18n="section.feedback">💬 反馈与建议</h2>
+                <h2 class="section-title" data-i18n="section.feedback">反馈与建议</h2>
                 <form id="feedback-form" class="feedback-form">
                     <div class="form-group">
                         <label for="email" data-i18n="feedback.email.label">邮箱（可选）</label>
@@ -229,7 +231,7 @@
                     </div>
                     <div id="form-message" class="form-message"></div>
                     <button type="submit" class="btn btn-primary form-submit" data-i18n="feedback.submit">
-                        📤 提交反馈
+                        提交反馈
                     </button>
                 </form>
             </div>
@@ -248,7 +250,7 @@
             </div>
             <p data-i18n="footer.rights">&copy; 2026 树皮斑马. All Rights Reserved.</p>
             <p class="visitor-count">
-                <span data-i18n="footer.visits">👀 本站访问量: </span>
+                <span data-i18n="footer.visits">本站访问量: </span>
                 <span id="visit-count">--</span>
             </p>
         </div>
