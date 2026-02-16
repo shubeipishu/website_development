@@ -20,48 +20,48 @@
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.showGenerator()" data-tooltip="图生成器 - 快速创建经典图结构" data-i18n-attr="data-tooltip:tooltip.generator"><i
+        <button class="tool-btn" onclick="app.showGenerator()" aria-label="图生成器 - 快速创建经典图结构" data-tooltip="图生成器 - 快速创建经典图结构" data-i18n-attr="data-tooltip:tooltip.generator;aria-label:tooltip.generator"><i
                 class="fas fa-wand-magic-sparkles" style="color:#d946ef;"></i></button>
-        <button class="tool-btn" id="btn-physics" onclick="app.togglePhysics()" data-tooltip="物理布局：开/关 - 自动优化节点位置" data-i18n-attr="data-tooltip:tooltip.physics.on"><i
+        <button class="tool-btn" id="btn-physics" onclick="app.togglePhysics()" aria-label="物理布局：开/关 - 自动优化节点位置" data-tooltip="物理布局：开/关 - 自动优化节点位置" data-i18n-attr="data-tooltip:tooltip.physics.on;aria-label:tooltip.physics.on"><i
                 class="fas fa-atom"></i></button>
-        <button class="tool-btn toggle-on" id="btn-snap" onclick="app.toggleSnap()" data-tooltip="智能吸附：开 - 自动对齐节点" data-i18n-attr="data-tooltip:tooltip.snap.on"><i
+        <button class="tool-btn toggle-on" id="btn-snap" onclick="app.toggleSnap()" aria-label="智能吸附：开 - 自动对齐节点" data-tooltip="智能吸附：开 - 自动对齐节点" data-i18n-attr="data-tooltip:tooltip.snap.on;aria-label:tooltip.snap.on"><i
                 class="fas fa-magnet"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.deleteSelectionAction()" data-tooltip="删除选中对象 (Del)" data-i18n-attr="data-tooltip:tooltip.delete"><i
+        <button class="tool-btn" onclick="app.deleteSelectionAction()" aria-label="删除选中对象 (Del)" data-tooltip="删除选中对象 (Del)" data-i18n-attr="data-tooltip:tooltip.delete;aria-label:tooltip.delete"><i
                 class="fas fa-trash-alt"></i></button>
-        <button class="tool-btn" onclick="app.clear()" data-tooltip="清空画布 - 删除所有节点和边" data-i18n-attr="data-tooltip:tooltip.clear"><i class="fas fa-bomb"
+        <button class="tool-btn" onclick="app.clear()" aria-label="清空画布 - 删除所有节点和边" data-tooltip="清空画布 - 删除所有节点和边" data-i18n-attr="data-tooltip:tooltip.clear;aria-label:tooltip.clear"><i class="fas fa-bomb"
                 style="color:#ef4444"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.saveGraph()" data-tooltip="保存图为 JSON 文件 (Ctrl+S)" data-i18n-attr="data-tooltip:tooltip.save"><i
+        <button class="tool-btn" onclick="app.saveGraph()" aria-label="保存图为 JSON 文件 (Ctrl+S)" data-tooltip="保存图为 JSON 文件 (Ctrl+S)" data-i18n-attr="data-tooltip:tooltip.save;aria-label:tooltip.save"><i
                 class="fas fa-save"></i></button>
-        <button class="tool-btn" onclick="document.getElementById('file-input').click()"
-            data-tooltip="打开 JSON 文件 (Ctrl+O)" data-i18n-attr="data-tooltip:tooltip.open"><i class="fas fa-folder-open"></i></button>
+        <button class="tool-btn" onclick="document.getElementById('file-input').click()" aria-label="打开 JSON 文件 (Ctrl+O)"
+            data-tooltip="打开 JSON 文件 (Ctrl+O)" data-i18n-attr="data-tooltip:tooltip.open;aria-label:tooltip.open"><i class="fas fa-folder-open"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.showExportModal()" data-tooltip="导出 (PNG / TikZ)" data-i18n-attr="data-tooltip:tooltip.export"><i
+        <button class="tool-btn" onclick="app.showExportModal()" aria-label="导出 (PNG / TikZ)" data-tooltip="导出 (PNG / TikZ)" data-i18n-attr="data-tooltip:tooltip.export;aria-label:tooltip.export"><i
                 class="fas fa-file-export"></i></button>
 
         <div class="separator"></div>
 
-        <button class="tool-btn" onclick="app.undo()" data-tooltip="撤销上一步操作 (Ctrl+Z)" data-i18n-attr="data-tooltip:tooltip.undo"><i
+        <button class="tool-btn" onclick="app.undo()" aria-label="撤销上一步操作 (Ctrl+Z)" data-tooltip="撤销上一步操作 (Ctrl+Z)" data-i18n-attr="data-tooltip:tooltip.undo;aria-label:tooltip.undo"><i
                 class="fas fa-undo"></i></button>
-        <button class="tool-btn" onclick="app.redo()" data-tooltip="重做下一步操作 (Ctrl+Y)" data-i18n-attr="data-tooltip:tooltip.redo"><i
+        <button class="tool-btn" onclick="app.redo()" aria-label="重做下一步操作 (Ctrl+Y)" data-tooltip="重做下一步操作 (Ctrl+Y)" data-i18n-attr="data-tooltip:tooltip.redo;aria-label:tooltip.redo"><i
                 class="fas fa-redo"></i></button>
-        <button class="tool-btn" onclick="app.resetView()" data-tooltip="重置视图到原点 (按 0 键)" data-i18n-attr="data-tooltip:tooltip.reset"><i
+        <button class="tool-btn" onclick="app.resetView()" aria-label="重置视图到原点 (按 0 键)" data-tooltip="重置视图到原点 (按 0 键)" data-i18n-attr="data-tooltip:tooltip.reset;aria-label:tooltip.reset"><i
                 class="fas fa-compress-arrows-alt"></i></button>
 
         <div style="flex: 1;"></div>
         <div class="separator"></div>
 
-        <button class="tool-btn" id="btn-theme" onclick="app.toggleTheme()" data-tooltip="切换为深色主题" data-i18n-attr="data-tooltip:tooltip.theme.dark">
+        <button class="tool-btn" id="btn-theme" onclick="app.toggleTheme()" aria-label="切换为深色主题" data-tooltip="切换为深色主题" data-i18n-attr="data-tooltip:tooltip.theme.dark;aria-label:tooltip.theme.dark">
             <i class="fas fa-moon"></i>
         </button>
-        <button class="tool-btn" id="btn-lang" data-tooltip="切换语言">
+        <button class="tool-btn" id="btn-lang" aria-label="切换语言" data-tooltip="切换语言">
             EN
         </button>
     </div>

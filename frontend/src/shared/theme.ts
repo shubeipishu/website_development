@@ -9,6 +9,18 @@ export const THEME_KEY = 'site-theme';
 /** 主题过渡动画时长 (ms) */
 const TRANSITION_MS = 300;
 
+const ICON_SUN = `
+<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+  <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+  <path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"
+    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+</svg>`;
+
+const ICON_MOON = `
+<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+  <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor"></path>
+</svg>`;
+
 /** 主题初始化选项 */
 export interface ThemeOptions {
   /**
@@ -25,7 +37,7 @@ export interface ThemeOptions {
 export function updateThemeIcon(theme: string): void {
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
-    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeToggle.innerHTML = theme === 'dark' ? ICON_SUN : ICON_MOON;
   }
 }
 

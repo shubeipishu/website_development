@@ -206,6 +206,26 @@ img {
     gap: 1rem;
 }
 
+.menu-toggle {
+    display: none;
+    height: 40px;
+    min-width: 60px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all var(--transition-fast);
+}
+
+.menu-toggle:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+}
+
 .theme-toggle {
     width: 40px;
     height: 40px;
@@ -224,6 +244,10 @@ img {
 .theme-toggle:hover {
     background: var(--primary-light);
     border-color: var(--primary-color);
+}
+
+.theme-toggle svg {
+    display: block;
 }
 
 .lang-toggle {
@@ -422,8 +446,14 @@ main,
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     background: linear-gradient(135deg, var(--primary-color), #a855f7);
+}
+
+.project-cover-alt {
+    background: linear-gradient(135deg, #3b82f6, #10b981);
 }
 
 .project-content {
@@ -521,6 +551,16 @@ main,
 
 .faq-item.active .faq-answer {
     max-height: 500px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 /* ============================================================
@@ -637,6 +677,33 @@ main,
 @media (max-width: 768px) {
     .nav-links {
         display: none;
+        position: absolute;
+        top: calc(var(--nav-height) + 8px);
+        right: 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
+        padding: 0.5rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        min-width: 180px;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 0.625rem 0.75rem;
+        border-radius: 8px;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .hero h1 {
@@ -662,6 +729,17 @@ main,
 
     .changelog-date {
         align-self: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
 

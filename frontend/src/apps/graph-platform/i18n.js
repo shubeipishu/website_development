@@ -252,6 +252,7 @@
         if (btn) {
             btn.textContent = t('lang.toggle');
             btn.setAttribute('data-tooltip', t('tooltip.lang'));
+            btn.setAttribute('aria-label', t('tooltip.lang'));
         }
 
         if (window.app && window.app.generator) {
@@ -263,11 +264,15 @@
         if (window.app) {
             const snapBtn = document.getElementById('btn-snap');
             if (snapBtn) {
-                snapBtn.setAttribute('data-tooltip', t(window.app.snapEnabled ? 'tooltip.snap.on' : 'tooltip.snap.off'));
+                const snapText = t(window.app.snapEnabled ? 'tooltip.snap.on' : 'tooltip.snap.off');
+                snapBtn.setAttribute('data-tooltip', snapText);
+                snapBtn.setAttribute('aria-label', snapText);
             }
             const physicsBtn = document.getElementById('btn-physics');
             if (physicsBtn) {
-                physicsBtn.setAttribute('data-tooltip', t(window.app.physics && window.app.physics.active ? 'tooltip.physics.on' : 'tooltip.physics.off'));
+                const physicsText = t(window.app.physics && window.app.physics.active ? 'tooltip.physics.on' : 'tooltip.physics.off');
+                physicsBtn.setAttribute('data-tooltip', physicsText);
+                physicsBtn.setAttribute('aria-label', physicsText);
             }
         }
         if (window.app && window.app.ui && window.app.ui.syncI18n) {

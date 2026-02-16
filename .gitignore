@@ -54,6 +54,8 @@ frontend/node_modules/
 # User defined ignores
 新建文件夹/
 .claude/
+.codex/
+.gemini/
 .DS_Store
 
 # 后端数据目录 (包含数据库和用户数据)

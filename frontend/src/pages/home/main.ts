@@ -3,6 +3,7 @@ import { loadChangelog } from './changelog';
 import { initFAQ, loadFAQData } from './faq';
 import { initTheme } from '@/shared/theme';
 import { getLang, initI18n, onLangChange, t } from '@/shared/i18n';
+import { initMobileNav } from '@/shared/nav';
 
 /* ============================================================
    反馈表单
@@ -158,6 +159,7 @@ const init = () => {
   initI18n();
   initTheme();
   initFAQ();
+  initMobileNav();
   initFeedbackForm();
   loadChangelog(getLang());
   loadFAQData(getLang());

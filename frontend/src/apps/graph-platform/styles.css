@@ -43,6 +43,14 @@ body {
     transition: background-color 0.3s ease-in-out;
 }
 
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 /* 主题切换统一过渡：避免元素快慢不一致 */
 html.theme-transition *,
 html.theme-transition *::before,
@@ -1398,4 +1406,14 @@ td:hover {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
